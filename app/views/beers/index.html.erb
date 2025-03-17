@@ -1,0 +1,27 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Beers</h1>
+
+<div id="beers">
+  <% @beers.each do |beer| %>
+    <div id="<%= dom_id beer %>">
+      <p>
+        <strong>Name:</strong>
+        <%= link_to beer.name, beer %>
+      </p>
+
+      <p>
+        <strong>Style:</strong>
+        <%= beer.style %>
+      </p>
+
+      <p>
+      <strong>Brewery:</strong>
+      <%= link_to beer.brewery.name, beer.brewery %>
+      </p>
+    </div>
+  <% end %>
+</div>
+
+<p><%= link_to "New beer", new_beer_path %></p>
+<%= link_to "List of breweries", breweries_path %>
