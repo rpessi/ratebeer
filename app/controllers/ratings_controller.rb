@@ -7,6 +7,16 @@ class RatingsController < ApplicationController
     # render :index - renderöidään oletusarvona
   end
 
+  def new
+    @rating = Rating.new
+    @beers = Beer.all
+  end
+
+  def create
+    Rating.create params.require(:rating).permit(:score, :beer_id)
+    redirect_to ratings_path
+  end
+
   private
     # Use callbacks to share common setup or constraints
     # between actions.

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get 'kaikki_bisset', to: 'beers#index'
   get 'ratings', to: 'ratings#index'
+  get 'ratings/new', to: 'ratings#new'
+  post 'ratings', to: 'ratings#create'
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

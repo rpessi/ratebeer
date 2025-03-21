@@ -3,10 +3,17 @@ class Beer < ApplicationRecord
   has_many :ratings
 
   def average_rating
-    sum = 0
-    self.ratings.each do |rating|
-      sum = sum + rating.score
-    end
-    return (sum.to_f / self.ratings.count).round(1)
+    return 0 if ratings.empty?
+    scores = ratings.map {|ratings| ratings.score}
+    sum = scores.inject(:+)
+    return (sum.to_f / ratings.count).round(1)
+  end
+
+  def rating_summary
+    "Beer has #{ratings.count} #{'rating'.pluralize(ratings.count)} with an average of #{average_rating}"
+  end
+
+  def to_s
+    return "#{self.name}, #{self.brewery.name}"
   end
 end
