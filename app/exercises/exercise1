@@ -1,0 +1,330 @@
+Tämä ei mennyt kerralla putkeen, tässä on virheyritykset kaupan päälle.
+
+irb(main):009> Brewery.create(name: "BrewDog", year:2007)
+  TRANSACTION (0.1ms)  begin transaction
+  Brewery Create (0.7ms)  INSERT INTO "breweries" ("name", "year", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["name", "BrewDog"], ["year", 2007], ["created_at", "2025-03-17 17:20:06.890758"], ["updated_at", "2025-03-17 17:20:06.890758"]]
+  TRANSACTION (0.2ms)  commit transaction
+=> 
+#<Brewery:0x00007837ddf82810
+ id: 5,
+ name: "BrewDog",
+ year: 2007,
+ created_at: Mon, 17 Mar 2025 17:20:06.890758000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:20:06.890758000 UTC +00:00>
+irb(main):010> Beer.create(name: "Punk IPA", style: "IPA", brewery_id: 5)
+  TRANSACTION (0.1ms)  begin transaction
+  Brewery Load (0.6ms)  SELECT "breweries".* FROM "breweries" WHERE "breweries"."id" = ? LIMIT ?  [["id", 5], ["LIMIT", 1]]
+  Beer Create (0.2ms)  INSERT INTO "beers" ("name", "style", "brewery_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"  [["name", "Punk IPA"], ["style", "IPA"], ["brewery_id", 5], ["created_at", "2025-03-17 17:21:04.707842"], ["updated_at", "2025-03-17 17:21:04.707842"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Beer:0x00007837e1910f00
+ id: 15,
+ name: "Punk IPA",
+ style: "IPA",
+ brewery_id: 5,
+ created_at: Mon, 17 Mar 2025 17:21:04.707842000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:21:04.707842000 UTC +00:00>
+irb(main):011> Beer.create(name: "Nanny State", style: "Iowalcholol", brewery_id: 5)
+  TRANSACTION (0.0ms)  begin transaction
+  Brewery Load (0.5ms)  SELECT "breweries".* FROM "breweries" WHERE "breweries"."id" = ? LIMIT ?  [["id", 5], ["LIMIT", 1]]
+  Beer Create (0.1ms)  INSERT INTO "beers" ("name", "style", "brewery_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"  [["name", "Nanny State"], ["style", "Iowalcholol"], ["brewery_id", 5], ["created_at", "2025-03-17 17:22:52.650948"], ["updated_at", "2025-03-17 17:22:52.650948"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Beer:0x00007837ddfadfd8
+ id: 16,
+ name: "Nanny State",
+ style: "Iowalcholol",
+ brewery_id: 5,
+ created_at: Mon, 17 Mar 2025 17:22:52.650948000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:22:52.650948000 UTC +00:00>
+irb(main):012> b = Beer.find_by(id=15)
+(irb):12:in `<main>': Unsupported argument type: 15 (Integer) (ArgumentError)
+
+          raise ArgumentError, "Unsupported argument type: #{opts} (#{opts.class})"
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+irb(main):013> b = Beer.find_by(id="15")
+  Beer Load (0.3ms)  SELECT "beers".* FROM "beers" WHERE (15) LIMIT ?  [["LIMIT", 1]]
+=> 
+#<Beer:0x00007837ddf49b00
+...
+irb(main):014> b.ratings.create score: 12
+  TRANSACTION (0.0ms)  begin transaction
+  Rating Create (0.3ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 12], ["beer_id", 1], ["created_at", "2025-03-17 17:25:34.664755"], ["updated_at", "2025-03-17 17:25:34.664755"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf47d00
+ id: 4,
+ score: 12,
+ beer_id: 1,
+ created_at: Mon, 17 Mar 2025 17:25:34.664755000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:25:34.664755000 UTC +00:00>
+irb(main):015> b.ratings.create score: 23
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.7ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 23], ["beer_id", 1], ["created_at", "2025-03-17 17:25:40.044832"], ["updated_at", "2025-03-17 17:25:40.044832"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf48840
+ id: 5,
+ score: 23,
+ beer_id: 1,
+ created_at: Mon, 17 Mar 2025 17:25:40.044832000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:25:40.044832000 UTC +00:00>
+irb(main):016> b.ratings.create score: 19
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.7ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 19], ["beer_id", 1], ["created_at", "2025-03-17 17:25:51.785388"], ["updated_at", "2025-03-17 17:25:51.785388"]]
+  TRANSACTION (0.2ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4b680
+ id: 6,
+ score: 19,
+ beer_id: 1,
+ created_at: Mon, 17 Mar 2025 17:25:51.785388000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:25:51.785388000 UTC +00:00>
+irb(main):017> b = Beer.find_by(id="16")
+  Beer Load (0.2ms)  SELECT "beers".* FROM "beers" WHERE (16) LIMIT ?  [["LIMIT", 1]]
+=> 
+#<Beer:0x00007837ddf4a000
+...
+irb(main):018> b.ratings.create score: 8
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (1.1ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 8], ["beer_id", 1], ["created_at", "2025-03-17 17:26:17.259322"], ["updated_at", "2025-03-17 17:26:17.259322"]]
+  TRANSACTION (0.2ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4e9c0
+ id: 7,
+ score: 8,
+ beer_id: 1,
+ created_at: Mon, 17 Mar 2025 17:26:17.259322000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:26:17.259322000 UTC +00:00>
+irb(main):019> b.name
+=> "Iso 3"
+irb(main):020> b = Beer.last
+  Beer Load (0.2ms)  SELECT "beers".* FROM "beers" ORDER BY "beers"."id" DESC LIMIT ?  [["LIMIT", 1]]
+=> 
+#<Beer:0x00007837ddf4ac80
+...
+irb(main):021> b.name
+=> "Nanny State"
+irb(main):022> b.ratings.create score: 8
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 8], ["beer_id", 16], ["created_at", "2025-03-17 17:28:48.694090"], ["updated_at", "2025-03-17 17:28:48.694090"]]
+  TRANSACTION (0.2ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4b2c0
+ id: 8,
+ score: 8,
+ beer_id: 16,
+ created_at: Mon, 17 Mar 2025 17:28:48.694090000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:28:48.694090000 UTC +00:00>
+irb(main):023> b.ratings.create score: 19
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 19], ["beer_id", 16], ["created_at", "2025-03-17 17:28:55.976800"], ["updated_at", "2025-03-17 17:28:55.976800"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4b7c0
+ id: 9,
+ score: 19,
+ beer_id: 16,
+ created_at: Mon, 17 Mar 2025 17:28:55.976800000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:28:55.976800000 UTC +00:00>
+irb(main):024> b.ratings.create score: 15
+  TRANSACTION (0.0ms)  begin transaction
+  Rating Create (0.3ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 15], ["beer_id", 16], ["created_at", "2025-03-17 17:28:59.408445"], ["updated_at", "2025-03-17 17:28:59.408445"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4f280
+ id: 10,
+ score: 15,
+ beer_id: 16,
+ created_at: Mon, 17 Mar 2025 17:28:59.408445000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:28:59.408445000 UTC +00:00>
+irb(main):025> b = Beer.find(15)
+  Beer Load (0.3ms)  SELECT "beers".* FROM "beers" WHERE "beers"."id" = ? LIMIT ?  [["id", 15], ["LIMIT", 1]]
+=> 
+#<Beer:0x00007837ddf4c940
+...
+irb(main):026> b.name
+=> "Punk IPA"
+irb(main):027> b.ratings.create score: 12
+  TRANSACTION (0.0ms)  begin transaction
+  Rating Create (0.2ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 12], ["beer_id", 15], ["created_at", "2025-03-17 17:30:15.422416"], ["updated_at", "2025-03-17 17:30:15.422416"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf476c0
+ id: 11,
+ score: 12,
+ beer_id: 15,
+ created_at: Mon, 17 Mar 2025 17:30:15.422416000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:30:15.422416000 UTC +00:00>
+irb(main):028> b.ratings.create score: 23
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 23], ["beer_id", 15], ["created_at", "2025-03-17 17:30:20.953388"], ["updated_at", "2025-03-17 17:30:20.953388"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4a280
+ id: 12,
+ score: 23,
+ beer_id: 15,
+ created_at: Mon, 17 Mar 2025 17:30:20.953388000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:30:20.953388000 UTC +00:00>
+irb(main):029> b.ratings.create score: 19
+  TRANSACTION (0.1ms)  begin transaction
+  Rating Create (0.6ms)  INSERT INTO "ratings" ("score", "beer_id", "created_at", "updated_at") VALUES (?, ?, ?, ?) RETURNING "id"  [["score", 19], ["beer_id", 15], ["created_at", "2025-03-17 17:30:25.549360"], ["updated_at", "2025-03-17 17:30:25.549360"]]
+  TRANSACTION (0.1ms)  commit transaction
+=> 
+#<Rating:0x00007837ddf4cf80
+ id: 13,
+ score: 19,
+ beer_id: 15,
+ created_at: Mon, 17 Mar 2025 17:30:25.549360000 UTC +00:00,
+ updated_at: Mon, 17 Mar 2025 17:30:25.549360000 UTC +00:00>
+irb(main):030> Ratings.all
+(irb):30:in `<main>': uninitialized constant Ratings (NameError)
+
+Ratings.all
+^^^^^^^
+irb(main):031> Ratings
+(irb):31:in `<main>': uninitialized constant Ratings (NameError)
+
+Ratings
+^^^^^^^
+irb(main):032> Beer.all
+  Beer Load (0.4ms)  SELECT "beers".* FROM "beers" /* loading for pp */ LIMIT ?  [["LIMIT", 11]]
+=> 
+[#<Beer:0x00007837ddf4ed80
+  id: 1,
+  name: "Iso 3",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:22:10.380288000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.380288000 UTC +00:00>,
+ #<Beer:0x00007837ddf4ec40
+  id: 2,
+  name: "Karhu",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:22:10.382753000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.382753000 UTC +00:00>,
+ #<Beer:0x00007837ddf4eb00
+  id: 3,
+  name: "Tuplahumala",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:22:10.385030000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.385030000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e9c0
+  id: 4,
+  name: "Huvila Pale Ale",
+  style: "Pale Ale",
+  brewery_id: 2,
+  created_at: Sat, 15 Mar 2025 15:22:10.387340000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.387340000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e880
+  id: 5,
+  name: "X Porter",
+  style: "Porter",
+  brewery_id: 2,
+  created_at: Sat, 15 Mar 2025 15:22:10.389497000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.389497000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e740
+  id: 6,
+  name: "Hefeweizen",
+  style: "Weizen",
+  brewery_id: 3,
+  created_at: Sat, 15 Mar 2025 15:22:10.391711000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.391711000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e600
+  id: 7,
+  name: "Helles",
+  style: "Lager",
+  brewery_id: 3,
+  created_at: Sat, 15 Mar 2025 15:22:10.393774000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:22:10.393774000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e380
+  id: 8,
+  name: "Lite",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:30:07.996982000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:30:07.996982000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e240
+  id: 9,
+  name: "IVB",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:32:22.326793000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:32:22.326793000 UTC +00:00>,
+ #<Beer:0x00007837ddf4e100
+  id: 10,
+  name: "Extra Light Triple Brewed",
+  style: "Lager",
+  brewery_id: 1,
+  created_at: Sat, 15 Mar 2025 15:33:30.915074000 UTC +00:00,
+  updated_at: Sat, 15 Mar 2025 15:33:30.915074000 UTC +00:00>,
+ "..."]
+irb(main):033> Rating.all
+  Rating Load (0.3ms)  SELECT "ratings".* FROM "ratings" /* loading for pp */ LIMIT ?  [["LIMIT", 11]]
+=> 
+[#<Rating:0x00007837ddf4ce40
+  id: 1,
+  score: 10,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:15:06.732573000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:15:06.732573000 UTC +00:00>,
+ #<Rating:0x00007837ddf4cd00
+  id: 2,
+  score: 21,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:15:15.933240000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:15:15.933240000 UTC +00:00>,
+ #<Rating:0x00007837ddf4cbc0
+  id: 3,
+  score: 17,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:15:19.989413000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:15:19.989413000 UTC +00:00>,
+ #<Rating:0x00007837ddf4ca80
+  id: 4,
+  score: 12,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:25:34.664755000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:25:34.664755000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c800
+  id: 5,
+  score: 23,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:25:40.044832000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:25:40.044832000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c6c0
+  id: 6,
+  score: 19,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:25:51.785388000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:25:51.785388000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c580
+  id: 7,
+  score: 8,
+  beer_id: 1,
+  created_at: Mon, 17 Mar 2025 17:26:17.259322000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:26:17.259322000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c440
+  id: 8,
+  score: 8,
+  beer_id: 16,
+  created_at: Mon, 17 Mar 2025 17:28:48.694090000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:28:48.694090000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c300
+  id: 9,
+  score: 19,
+  beer_id: 16,
+  created_at: Mon, 17 Mar 2025 17:28:55.976800000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:28:55.976800000 UTC +00:00>,
+ #<Rating:0x00007837ddf4c1c0
+  id: 10,
+  score: 15,
+  beer_id: 16,
+  created_at: Mon, 17 Mar 2025 17:28:59.408445000 UTC +00:00,
+  updated_at: Mon, 17 Mar 2025 17:28:59.408445000 UTC +00:00>,
+ "..."]
+irb(main):034> 
+
