@@ -6,7 +6,7 @@
 <div id="ratings">
   <ul>
     <% @ratings.each do |rating| %>
-      <li> <%= rating.print_report %></li>
+      <li> <%= rating.to_s %> <%= button_to 'Delete', rating, method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } } %> </li>
     <% end %>
   </ul>
 </div>
