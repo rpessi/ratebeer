@@ -1,6 +1,20 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @user %>
+<div id="<%= dom_id @user %>">
+  <p>
+    <h2>Username:</h2>
+    <%= @user.username %>
+  </p>
+  <p>
+    <%= @user.rating_summary %>
+  </p>
+  <h3>Ratings</h3>
+  <ul>
+    <% @user.ratings.each do |rating| %>
+      <li> <%= rating.to_s %> <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %> </li>
+    <% end %>
+  </ul>
+</div>
 
 <div>
   <%= link_to "Edit this user", edit_user_path(@user) %> |

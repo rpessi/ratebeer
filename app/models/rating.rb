@@ -6,6 +6,11 @@ class Rating < ApplicationRecord
     "#{beer.name} #{score}"
   end
 
+  def get_user #get user by rating
+    id = user_id
+    User.find(id)
+  end
+
   def to_s
     "#{beer.name} #{score}"
   end

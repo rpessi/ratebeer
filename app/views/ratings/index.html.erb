@@ -1,14 +1,16 @@
 <p style="color: green"><%= notice %></p>
 
 <h2>List of ratings</h2>
-<p>Number of ratings: <%= @ratings.count %></p>
 
 <div id="ratings">
   <ul>
     <% @ratings.each do |rating| %>
-      <li> <%= rating.to_s %> <%= button_to 'Delete', rating, method: :delete, form: { data: { turbo_confirm: 'Are you sure?' } } %> </li>
+      <% user = rating.get_user %>
+      <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
     <% end %>
   </ul>
 </div>
 
-<p><%= link_to "Create new rating", new_rating_path %></p>
+<% if current_user %>
+  <%= link_to "Create new rating", new_rating_path %>
+<% end %>

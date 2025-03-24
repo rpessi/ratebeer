@@ -4,8 +4,6 @@ module RatingAverage
   def average_rating
     return 0 if ratings.empty?
 
-    scores = ratings.map(&score)
-    sum = scores.inject(:+)
-    (sum.to_f / ratings.count).round(1)
+    (ratings.map(&:score).sum / ratings.count.to_f).round(1)
   end
 end
