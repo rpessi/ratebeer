@@ -11,7 +11,7 @@ class Brewery < ApplicationRecord
   end
 
   def rating_summary
-    "Brewery has #{ratings.count} #{'rating'.pluralize(ratings.count)} 
+    "Brewery has #{ratings.count} #{'rating'.pluralize(ratings.count)}
     with an average of #{average_rating}"
   end
 

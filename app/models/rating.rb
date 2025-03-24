@@ -1,15 +1,12 @@
 class Rating < ApplicationRecord
   belongs_to :beer
+  belongs_to :user   # rating kuuluu myös käyttäjään
 
-  def print_report
-    # report = []
-    # report << "#{beer.name} "
-    # report << "#{score}"
-    # report.join("")
-    return "#{beer.name} #{score}"
+  def print_report #check if replaced _everywhere_ with to_s before removing
+    "#{beer.name} #{score}"
   end
 
   def to_s
-    return "#{beer.name} #{score}"
+    "#{beer.name} #{score}"
   end
 end

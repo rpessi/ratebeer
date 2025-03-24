@@ -1,6 +1,5 @@
 class RatingsController < ApplicationController
-  before_action :set_rating, only: %i[ show ]
-
+  before_action :set_rating, only: %i[show]
 
   def index
     @ratings = Rating.all
@@ -13,7 +12,8 @@ class RatingsController < ApplicationController
   end
 
   def create
-    Rating.create params.require(:rating).permit(:score, :beer_id)
+    rating = Rating.create params.require(:rating).permit(:score, :beer_id)
+    session[:last_rating] = "#{rating.beer.name} #{rating.score} points"
     redirect_to ratings_path
   end
 
@@ -24,15 +24,15 @@ class RatingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints
-    # between actions.
-    def set_rating
-      @rating = Rating.find(params[:id]) 
-    end
 
-    # Only allow a list of trusted parameters through.
-    def rating_params
-      params.require(:rating).permit(:score, :beer_id)
-    end
+  # Use callbacks to share common setup or constraints
+  # between actions.
+  def set_rating
+    @rating = Rating.find(params[:id])
+  end
 
+  # Only allow a list of trusted parameters through.
+  def rating_params
+    params.require(:rating).permit(:score, :beer_id)
+  end
 end
