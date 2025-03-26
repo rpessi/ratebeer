@@ -3,17 +3,33 @@
 <div id="<%= dom_id @user %>">
   <p>
     <h2>Username:</h2>
-    <%= @user.username %>
+    <strong>
+      <%= @user.username %>
+    </strong>
   </p>
   <p>
     <%= @user.rating_summary %>
   </p>
-  <h3>Ratings</h3>
-  <ul>
-    <% @user.ratings.each do |rating| %>
-      <li> <%= rating.to_s %> <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %> </li>
+
+  <% if not @user.ratings.empty? %>
+    <h3>Ratings</h3>
+    <ul>
+      <% @user.ratings.each do |rating| %>
+        <li> <%= rating.to_s %> <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %> </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if not @user.beer_clubs.empty? %>
+    <h3>Member of</h3>
+    <% @user.beer_clubs.each do |club| %>
+    <p>
+      <%= link_to club.name, club %>
+    </p>
     <% end %>
-  </ul>
+  <% else %>
+    <p>User has no memberships in beer clubs. </p>
+  <% end%>
 </div>
 
 <div>
