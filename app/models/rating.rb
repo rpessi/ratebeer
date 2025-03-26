@@ -6,13 +6,9 @@ class Rating < ApplicationRecord
                                     less_than_or_equal_to: 50,
                                     only_integer: true }
 
-  def print_report #check if replaced _everywhere_ with to_s before removing
+  # check if replaced _everywhere_ with to_s before removing
+  def print_report
     "#{beer.name} #{score}"
-  end
-
-  def get_user #get user by rating
-    id = user_id
-    User.find(id)
   end
 
   def to_s

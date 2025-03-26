@@ -7,6 +7,6 @@ class BeerClub < ApplicationRecord
   end
 
   def member_names
-    members.map{ |member| member.username } 
+    members.map(& :username)
   end
 end

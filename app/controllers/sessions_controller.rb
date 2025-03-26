@@ -4,15 +4,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # haetaan usernamea vastaava käyttäjä tietokannasta
     user = User.find_by username: params[:username]
-    if user.nil?
-      redirect_to signin_path, notice: "User #{params[:username]} does not exist!"
+    # haetaan user ja tarkistetaan salasana
+    # use safe navigation operator to check if nil before calling authenticate
+    if user&.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect_to user, notice: "Welcome back!" # redirect_to user_path(user)
     else
-    # talletetaan sessioon kirjautuneen käyttäjän id (jos käyttäjä on olemassa)
-    session[:user_id] = user.id if user
-    # uudelleen ohjataan käyttäjä omalle sivulleen
-    redirect_to user, notice: "Welcome back!" #redirect_to user_path(user)
+      redirect_to signin_path, notice: "Username and/or password mismatch!"
     end
   end
 

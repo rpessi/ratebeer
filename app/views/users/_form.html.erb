@@ -11,11 +11,22 @@
     </div>
   <% end %>
 
+  <% if @user.new_record? %>
+    <div>
+      <%= form.label :username, style: "display: block" %>
+      <%= form.text_field :username %>
+    </div>
+  <% end %>
+
   <div>
-    <%= form.label :username, style: "display: block" %>
-    <%= form.text_field :username %>
+    <%= form.label :password, style: "display: block"%>
+    <%= form.password_field :password %>
   </div>
 
+  <div>
+    <%= form.label :password_confirmation, style: "display: block"%>
+    <%= form.password_field :password_confirmation %>
+  </div>
   <div>
     <%= form.submit %>
   </div>

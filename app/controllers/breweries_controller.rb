@@ -78,7 +78,7 @@ class BreweriesController < ApplicationController
       unless admin_accounts.any? do |user, pass|
                user == username && pass == password
              end
-        raise "Wrong username or password"
+        raise "Wrong admin username or password"
       end
 
       return true

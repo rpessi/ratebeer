@@ -20,4 +20,3 @@ end
 # TODO: prevent double-entry of a membership
 # custom method?
 # Membership.find_by(user_id: @user.id, beer_club.id: @beer_club.id)
-

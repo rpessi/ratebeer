@@ -15,7 +15,11 @@
     <h3>Ratings</h3>
     <ul>
       <% @user.ratings.each do |rating| %>
-        <li> <%= rating.to_s %> <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %> </li>
+        <li> <%= rating.to_s %> 
+          <% if @user == current_user %>
+            <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
+          <%end%> 
+        </li>
       <% end %>
     </ul>
   <% end %>
@@ -29,12 +33,14 @@
     <% end %>
   <% else %>
     <p>User has no memberships in beer clubs. </p>
-  <% end%>
+  <% end %>
 </div>
 
 <div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
+  <% if @user == current_user %>
+    <%= link_to "Edit this user", edit_user_path(@user) %>
+    <%= button_to "Destroy this user", @user, method: :delete %>
+  <% end %>
+  <p></p>
   <%= link_to "Back to users", users_path %>
-
-  <%= button_to "Destroy this user", @user, method: :delete %>
 </div>

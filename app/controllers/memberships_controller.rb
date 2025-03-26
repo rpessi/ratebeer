@@ -1,5 +1,5 @@
 class MembershipsController < ApplicationController
-  before_action :set_membership, only: %i[ show edit update destroy ]
+  before_action :set_membership, only: %i[show edit update destroy]
 
   # GET /memberships or /memberships.json
   def index
@@ -31,7 +31,7 @@ class MembershipsController < ApplicationController
       else
         # error handling not working properly, but at least double entries are blocked
         Rails.logger.debug "Membership save failed: #{@membership.errors.full_messages}"
-        @beer_clubs = BeerClub.all #make available for re-rendering the options
+        @beer_clubs = BeerClub.all # make available for re-rendering the options
         if @membership.errors[:base].include?("You are already a member of this beer club.")
           format.html { redirect_to @membership.beer_club, alert: "You are already a member of this beer club." }
         else
@@ -68,13 +68,14 @@ class MembershipsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_membership
-      @membership = Membership.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def membership_params
-      params.require(:membership).permit(:beer_club_id, :user_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_membership
+    @membership = Membership.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def membership_params
+    params.require(:membership).permit(:beer_club_id, :user_id)
+  end
 end

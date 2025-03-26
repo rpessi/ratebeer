@@ -5,7 +5,7 @@
 <div id="ratings">
   <ul>
     <% @ratings.each do |rating| %>
-      <% user = rating.get_user %>
+      <% user = rating.user %>
       <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
     <% end %>
   </ul>

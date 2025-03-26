@@ -1,5 +1,5 @@
 class BeersController < ApplicationController
-  STYLES = ["Weizen", "Lager", "Pale ale", "IPA", "Porter", "Lowalcohol", "Seasonal"]
+  STYLES = ["Weizen", "Lager", "Pale ale", "IPA", "Porter", "Lowalcohol", "Seasonal"].freeze
 
   before_action :set_beer, only: %i[show edit update destroy]
 
