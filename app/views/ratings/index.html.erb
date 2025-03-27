@@ -6,9 +6,7 @@
   <ul>
     <% @ratings.each do |rating| %>
       <% user = rating.user %>
-      <% if user %>
-        <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
-      <% end %>
+      <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
     <% end %>
   </ul>
 </div>
