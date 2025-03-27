@@ -82,6 +82,13 @@ group :test do
   gem "selenium-webdriver"
 end
 
+group :test do
+  # ...
+  gem 'rspec-rails', '~> 6.0.0'
+end
+
+gem 'psych', '~> 5.2.3'
+
 gem "dockerfile-rails", ">= 1.7", :group => :development
 
 gem "litestream", "~> 0.12.0"

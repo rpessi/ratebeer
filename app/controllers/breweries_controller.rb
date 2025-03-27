@@ -72,12 +72,12 @@ class BreweriesController < ApplicationController
   end
 
   def authenticate
-    admin_accounts = { "pekka" => "beer", "arto" => "foobar", "matti" => "ittam", "vilma" => "kangas" }
+    admin_accounts = ENV.fetch('ADMIN_ACCOUNTS').split(',').to_h do |pair|
+      pair.split(':')
+    end
 
     authenticate_or_request_with_http_basic do |username, password|
-      unless admin_accounts.any? do |user, pass|
-               user == username && pass == password
-             end
+      unless admin_accounts[username] == password
         raise "Wrong admin username or password"
       end
 
