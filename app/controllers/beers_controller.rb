@@ -33,7 +33,7 @@ class BeersController < ApplicationController
         format.json { render :show, status: :created, location: @beer }
       else
         set_breweries_and_styles_for_template
-        format.html { render action :new }
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @beer.errors, status: :unprocessable_entity }
       end
     end

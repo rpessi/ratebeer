@@ -78,13 +78,12 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'rspec-rails', '~> 6.0.0.rc1'
+  gem 'factory_bot_rails'
   gem "capybara"
   gem "selenium-webdriver"
-end
-
-group :test do
-  # ...
-  gem 'rspec-rails', '~> 6.0.0'
+  gem "webdrivers"
+  gem 'launchy'
 end
 
 gem 'psych', '~> 5.2.3'
@@ -98,3 +97,7 @@ gem "aws-sdk-s3", "~> 1.182", :require => false
 gem "sentry-ruby"
 
 gem "sentry-rails"
+
+gem 'stringio', '~> 3.1.5'
+
+gem 'logger', '~> 1.6.6'
