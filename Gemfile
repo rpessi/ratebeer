@@ -46,18 +46,12 @@ gem "bootsnap", require: false
 
 group :development, :test do
   gem 'sqlite3'
-end
-
-group :development, :test do
   gem 'pry-byebug'
-end
-
-group :development, :test do
   gem 'dotenv-rails'
 end
 
 group :production do
-   gem 'pg'
+  gem 'pg'
 end
 
 group :development, :test do
@@ -84,6 +78,8 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
   gem 'launchy'
+  gem 'simplecov', require: false
+  gem 'rubocop'
 end
 
 gem 'psych', '~> 5.2.3'
@@ -94,10 +90,9 @@ gem "litestream", "~> 0.12.0"
 
 gem "aws-sdk-s3", "~> 1.182", :require => false
 
-gem "sentry-ruby"
-
-gem "sentry-rails"
-
 gem 'stringio', '~> 3.1.5'
 
 gem 'logger', '~> 1.6.6'
+
+gem "sentry-ruby"
+gem "sentry-rails"

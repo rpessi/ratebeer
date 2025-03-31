@@ -6,7 +6,7 @@ class Beer < ApplicationRecord
 
   belongs_to :brewery
   has_many :ratings, dependent: :destroy
-  has_many :raters, -> { distinct}, through: :ratings, source: :user
+  has_many :raters, -> { distinct }, through: :ratings, source: :user
 
   def rating_summary
     "Beer has #{ratings.count} #{'rating'.pluralize(ratings.count)} with an average of #{average_rating}"

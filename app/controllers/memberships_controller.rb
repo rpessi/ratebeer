@@ -27,20 +27,11 @@ class MembershipsController < ApplicationController
     respond_to do |format|
       if @membership.save
         format.html { redirect_to @membership, notice: "Membership was successfully created." }
-        format.json { render :show, status: :created, location: @membership }
       else
-        # error handling not working properly, but at least double entries are blocked
-        Rails.logger.debug "Membership save failed: #{@membership.errors.full_messages}"
-        @beer_clubs = BeerClub.all # make available for re-rendering the options
-        if @membership.errors[:base].include?("You are already a member of this beer club.")
-          format.html { redirect_to @membership.beer_club, alert: "You are already a member of this beer club." }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-        end
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
+        @membership = Membership.find_by(membership_params)
+        format.html { redirect_to @membership, notice: "You are already a member." }
       end
-    rescue ActiveRecord::RecordNotUnique 
-      redirect_to beer_clubs_path, alert: "You are already a member of this beer club."
+      format.json { render :show, status: :created, location: @membership }
     end
   end
 

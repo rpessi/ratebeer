@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   # DELETE /users/1 or /users/1.json
   def destroy
     if @user == current_user
-      @user.destroy! 
+      @user.destroy!
       session.delete(:user_id)
     end
 
