@@ -7,9 +7,11 @@ describe "Beers page" do
   describe "with at least one brewery" do
     before :each do
       @beer = FactoryBot.create :beer #creates a brewery as well
+      FactoryBot.create :user
     end
 
     it "allows a beer with a name to be added" do
+      sign_in(username: "Pekka", password: "Foobar1")
       visit new_beer_path
       fill_in('beer_name', with: 'Tasty Lager' )
       select(@beer.style)
@@ -21,6 +23,7 @@ describe "Beers page" do
     end
 
     it "will not allow a beer without a name to be added" do
+      sign_in(username: "Pekka", password: "Foobar1")
       visit new_beer_path
       fill_in('beer_name', with: '' )
       select(@beer.style)

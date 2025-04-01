@@ -3,8 +3,13 @@
 <%= render @beer %>
 
 <div>
-  <%= link_to "Edit this beer", edit_beer_path(@beer) %> |
-  <%= link_to "Back to beers", beers_path %>
+  <% if current_user %>
+    <%= link_to "Edit this beer", edit_beer_path(@beer) %> |
+    <%= link_to "Back to beers", beers_path %>
+    <%= button_to "Destroy this beer", @beer, method: :delete if current_user %>
+  <% else %>
+    <%= link_to "Back to beers", beers_path %>
+  <% end %>
 
-  <%= button_to "Destroy this beer", @beer, method: :delete %>
+  
 </div>
