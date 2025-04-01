@@ -4,7 +4,7 @@ include Helpers
 
 describe "User" do
   before :each do
-    FactoryBot.create :user
+    @user = FactoryBot.create :user
   end
 
   describe "who has signed up" do
@@ -31,6 +31,38 @@ describe "User" do
       expect{
         click_button('Create User')
       }.to change{User.count}.by(1)
+    end
+
+    describe "has a user page that" do
+      it "shows no favorite beer style if user has no ratings" do
+        visit user_path(@user)
+
+        expect(page).to have_content "User has no ratings"
+        expect(page).not_to have_content "Favorite beer style"
+      end
+
+      it "shows no favorite brewery if user has no ratings" do
+        visit user_path(@user)
+
+        expect(page).to have_content "User has no ratings"
+        expect(page).not_to have_content "Favorite brewery"
+      end
+
+      it "shows user's favorite beer style if user has ratings" do
+        create_beer_with_rating({ user: @user }, 25)
+        visit user_path(@user)
+
+        expect(page).to have_content "Favorite beer style"
+        expect(page).to have_content @user.favorite_style
+      end
+
+      it "shows user's favorite brewery if user has ratings" do
+        create_beer_with_rating({ user: @user }, 25)
+        visit user_path(@user)
+
+        expect(page).to have_content "Favorite brewery"
+        expect(page).to have_content @user.favorite_brewery
+      end
     end
   end
 end

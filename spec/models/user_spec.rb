@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
     end
 
     it "is the one with highest rating if several rated" do
-      create_beers_with_many_ratings({user: user}, 10, 20, 15, 7, 9)
+      create_beers_with_many_ratings({ user: user }, 10, 20, 15, 7, 9)
       best = create_beer_with_rating({ user: user }, 25 )
     
       expect(user.favorite_beer).to eq(best)
@@ -110,9 +110,46 @@ RSpec.describe User, type: :model do
       FactoryBot.create(:rating, score: 20, beer: beer3, user: user)
       FactoryBot.create(:rating, score: 15, beer: beer4, user: user)
       FactoryBot.create(:rating, score: 20, beer: beer5, user: user)
-      FactoryBot.create(:rating, score: 20, beer: beer6, user: user)
+      FactoryBot.create(:rating, score: 16, beer: beer6, user: user)
 
       expect(user.favorite_style).to eq(beer5.style)
+    end
+  end
+
+  describe "favorite brewery" do
+    let(:user){ FactoryBot.create(:user) }
+
+    it "has method for determining one" do
+      expect(user).to respond_to(:favorite_brewery)
+    end
+
+    it "without ratings does not have one" do
+      expect(user.favorite_brewery).to eq(nil)
+    end
+
+    it "is the only rated if only one rating" do
+      create_beer_with_rating({ user: user }, 25 )
+      expect(user.favorite_brewery).to eq(user.ratings.first.beer.brewery.name)
+    end
+
+    it "is the one with highest average rating" do
+      brewery1 = FactoryBot.create(:brewery, name: "Koff")
+      brewery2 = FactoryBot.create(:brewery, name: "Olvi")
+      brewery3 = FactoryBot.create(:brewery, name: "Laitila")
+      beer1 = Beer.create(name: "Koff1", style: "Lager", brewery_id: brewery1.id)
+      beer2 = Beer.create(name: "Koff2", style: "Lager", brewery_id: brewery1.id)
+      beer3 = Beer.create(name: "Olvi1", style: "Lager", brewery_id: brewery2.id)
+      beer4 = Beer.create(name: "Olvi2", style: "Lager", brewery_id: brewery2.id)
+      beer5 = Beer.create(name: "Laitila1", style: "Lager", brewery_id: brewery3.id)
+      beer6 = Beer.create(name: "Laitila2", style: "Lager", brewery_id: brewery3.id)
+      FactoryBot.create(:rating, score: 10, beer: beer1, user: user)
+      FactoryBot.create(:rating, score: 15, beer: beer2, user: user)
+      FactoryBot.create(:rating, score: 20, beer: beer3, user: user)
+      FactoryBot.create(:rating, score: 15, beer: beer4, user: user)
+      FactoryBot.create(:rating, score: 20, beer: beer5, user: user)
+      FactoryBot.create(:rating, score: 20, beer: beer6, user: user)
+
+      expect(user.favorite_brewery).to eq(beer5.brewery.name)
     end
   end
 end

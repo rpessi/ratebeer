@@ -10,6 +10,12 @@
   <p>
     <%= @user.rating_summary %>
   </p>
+  <p>
+    <%= "Favorite beer style: #{@user.favorite_style}" unless @user.ratings.empty? %>
+  </p>
+  <p>
+    <%= "Favorite brewery: #{@user.favorite_brewery}" unless @user.ratings.empty? %>
+  </p>
 
   <% if not @user.ratings.empty? %>
     <h3>Ratings</h3>
