@@ -80,19 +80,15 @@ group :test do
   gem 'launchy'
   gem 'simplecov', require: false
   gem 'rubocop'
+  gem 'webmock'
 end
 
 gem 'psych', '~> 5.2.3'
-
 gem "dockerfile-rails", ">= 1.7", :group => :development
-
 gem "litestream", "~> 0.12.0"
-
 gem "aws-sdk-s3", "~> 1.182", :require => false
-
 gem 'stringio', '~> 3.1.5'
-
 gem 'logger', '~> 1.6.6'
-
 gem "sentry-ruby"
 gem "sentry-rails"
+gem 'httparty'
