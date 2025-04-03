@@ -10,6 +10,7 @@
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
+/.secrets
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -37,3 +38,6 @@
 
 # Ignore http request files with API keys
 /spec/http_requests
+
+# Ignore act, a bash for running GH workflows locally
+/bin/act

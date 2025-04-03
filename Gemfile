@@ -79,7 +79,6 @@ group :test do
   gem "webdrivers"
   gem 'launchy'
   gem 'simplecov', require: false
-  gem 'codeclimate-test-reporter', require: false
   gem 'rubocop'
   gem 'webmock'
 end
