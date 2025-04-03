@@ -1,7 +1,15 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
+require 'codeclimate-test-reporter'
 require 'webmock/rspec'
-SimpleCov.start('rails')
+SimpleCov.start 'rails' do
+  add_filter '/spec/' # Exclude spec files from coverage
+end
+
+if ENV['CI'] # Only use CodeClimate formatter in CI environments
+  SimpleCov.formatter = SimpleCov::Formatter::CodeClimateFormatter
+end
+
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
