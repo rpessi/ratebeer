@@ -21,4 +21,9 @@ FactoryBot.define do
     beer # reittaukseen liittyvä olut luodaan beer-tehtaalla
     user # reittaukseen liittyvä user luodaan user-tehtaalla
   end
+
+  factory :beer_club do
+    name { "anonymous"}
+    founded { 2000 }
+  end
 end

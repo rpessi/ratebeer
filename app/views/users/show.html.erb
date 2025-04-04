@@ -32,11 +32,13 @@
 
   <% if not @user.beer_clubs.empty? %>
     <h3>Member of</h3>
-    <% @user.beer_clubs.each do |club| %>
-    <p>
-      <%= link_to club.name, club %>
-    </p>
-    <% end %>
+    <ul>
+      <% @user.beer_clubs.each do |club| %>
+        <li>
+          <%= link_to club.name, club %>
+        </li>
+      <% end %>
+    </ul>
   <% else %>
     <p>User has no memberships in beer clubs. </p>
   <% end %>

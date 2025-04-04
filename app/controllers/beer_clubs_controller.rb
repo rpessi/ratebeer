@@ -1,6 +1,7 @@
 class BeerClubsController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show]
   before_action :set_beer_club, only: %i[show edit update destroy]
+  helper_method :check_membership
 
   # GET /beer_clubs or /beer_clubs.json
   def index
@@ -10,6 +11,8 @@ class BeerClubsController < ApplicationController
 
   # GET /beer_clubs/1 or /beer_clubs/1.json
   def show
+    @membership = Membership.new
+    @membership.beer_club = @beer_club
   end
 
   # GET /beer_clubs/new
@@ -69,5 +72,9 @@ class BeerClubsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def beer_club_params
     params.require(:beer_club).permit(:name, :founded, :city)
+  end
+
+  def check_membership(beer_club)
+    current_user.memberships.exists?(beer_club_id: beer_club.id)
   end
 end
