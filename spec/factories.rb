@@ -6,24 +6,29 @@ FactoryBot.define do
   end
 
   factory :brewery do
-    name { "anonymous" }
+    name { "Factory Brewery" }
     year { 1900 }
   end
 
+  factory :style do
+    name { "Factory Style" }
+    description { "tasty" }
+  end
+
   factory :beer do
-    name { "anonymous" }
-    style { "Lager" }
-    brewery # olueen liittyvä panimo luodaan brewery-tehtaalla
+    name { "Factory Beer" }
+    association :style, factory: :style #olueen liittyvä tyyli luodaan style-tehtaalla
+    association :brewery, factory: :brewery # olueen liittyvä panimo luodaan brewery-tehtaalla
   end
 
   factory :rating do
     score { 10 }
-    beer # reittaukseen liittyvä olut luodaan beer-tehtaalla
-    user # reittaukseen liittyvä user luodaan user-tehtaalla
+    beer
+    user
   end
 
   factory :beer_club do
-    name { "anonymous"}
+    name { "Factory Beer Club"}
     founded { 2000 }
   end
 end

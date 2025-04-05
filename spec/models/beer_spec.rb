@@ -1,6 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Beer, type: :model do
+  # Copilot helper test to see if updated Factorybot works
+  it "is valid with a name, style, and brewery" do
+    style = FactoryBot.create(:style)
+    brewery = FactoryBot.create(:brewery)
+    beer = FactoryBot.create(:beer, style: style, brewery: brewery)
+
+    expect(beer).to be_valid
+    expect(beer.style).to eq(style)
+    expect(beer.brewery).to eq(brewery)
+  end
+  # Copilot helper test to see if updated Factorybot works
+  it "is invalid without a style" do
+    brewery = FactoryBot.create(:brewery)
+    beer = FactoryBot.build(:beer, style: nil, brewery: brewery)
+
+    expect(beer).not_to be_valid
+  end
+
   it "has the name set correctly" do
     beer = Beer.new name: "Hefeweisse"
 
@@ -8,23 +26,24 @@ RSpec.describe Beer, type: :model do
   end
 
   it "has the style set correctly" do
-    beer = Beer.new style: "Weizen"
+    beer = Beer.new style_id: 1
 
-    expect(beer.style).to eq("Weizen")
+    expect(beer.style_id).to eq(1)
   end
 
-  describe "with existing parent brewery" do
+  describe "with existing parent brewery and parent style" do
     let(:test_brewery) { Brewery.new name: "test", year: 2000, id: 1 }
+    let(:test_style) { Style.new name: "anonymous", description: "tasty", id: 5}
 
-    it "is saved when name, style and brewery_id given" do
-      beer = Beer.create name: "Hefeweisse", style: "Weizen", brewery: test_brewery
+    it "is saved when name, style_id and brewery_id are given" do
+      beer = Beer.create name: "Hefeweisse", style: test_style, brewery: test_brewery
 
       expect(beer).to be_valid
       expect(Beer.count).to eq(1)
     end
 
     it "is not saved, if name is not given" do
-      beer = Beer.create style: "Weizen", brewery: test_brewery
+      beer = Beer.create style: test_style, brewery: test_brewery
 
       expect(beer).not_to be_valid
       expect(Beer.count).to eq(0)
@@ -38,8 +57,3 @@ RSpec.describe Beer, type: :model do
     end
   end
 end
-
-
-# oluen luonti onnistuu ja olut tallettuu kantaan jos oluella on nimi, tyyli ja panimo asetettuna
-# oluen luonti ei onnistu (eli creatella ei synny validia oliota), jos sille ei anneta nimeä
-# oluen luonti ei onnistu, jos sille ei määritellä tyyliä

@@ -34,7 +34,7 @@ class User < ApplicationRecord
   end
 
   def ratings_by_style
-    grouped_ratings = ratings.group_by { |rating| rating.beer.style }
+    grouped_ratings = ratings.group_by { |rating| rating.beer.style.name }
     grouped_ratings.transform_values do |style_ratings|
       total_score = style_ratings.sum(&:score)
       total_score.to_f / style_ratings.size
@@ -45,7 +45,7 @@ class User < ApplicationRecord
   def favorite_style
     return nil if ratings.empty?
 
-    return Beer.find(ratings[0].beer_id).style if ratings.count == 1
+    return Beer.find(ratings[0].beer_id).style.name if ratings.count == 1
 
     averages_by_style = ratings_by_style
     averages_by_style.max_by { |_style, avg_score| avg_score }&.first
