@@ -1,0 +1,30 @@
+<p style="color: green"><%= notice %></p>
+
+<div id="<%= dom_id @style %>">
+  <p>
+    <strong>Name:</strong>
+    <%= @style.name %>
+  </p>
+
+  <p>
+    <strong> Description:</strong>
+    <%= @style.description %>
+  </p>
+  <% unless @style.beers.empty? %>
+    <strong> Beers:</strong>
+    <ul>
+        <% @style.beers.each do |beer| %>
+            <li><%= beer.name %></li>
+        <% end %>
+    </ul>
+  <% end %>
+
+  <% if current_user%>
+    <%= link_to "Edit this style", edit_style_path(@style) %> |
+    <%= link_to "Back to styles", styles_path %>
+    <%= button_to "Destroy this style", @style, method: :delete %>
+  <% else %>
+    <%= link_to "Back to styles", styles_path %>
+  <% end %>
+
+</div>

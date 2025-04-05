@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>List of styles</h2>
+<%= "Number of beer styles: #{@styles.count}" %>
+
+<div id="styles">
+  <ul>
+    <% @styles.each do |style| %>
+      <li> <%= link_to style, style %> </li>
+    <% end %>
+  </ul>
+</div>
+
+<% if current_user %>
+  <%= link_to "Create new style", new_style_path(@style) %>
+<% end %>

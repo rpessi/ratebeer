@@ -3,7 +3,8 @@ class Brewery < ApplicationRecord
 
   validate :year_cannot_be_in_the_future, on: :create
 
-  validates :name, presence: true
+  validates :name, presence: true,
+                   uniqueness: true
   validates :year, numericality: { greater_than_or_equal_to: 1040,
                                    only_integer: true }
   # TODO: change 2022 to current year with a custom validation method

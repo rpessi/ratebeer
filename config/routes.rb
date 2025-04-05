@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :users
   root 'breweries#index'
   resources :beers
+  resources :styles
   resources :breweries
   resources :ratings, only: [:index, :new, :create, :destroy]
   resources :places, only: [:index, :show]
