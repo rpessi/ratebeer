@@ -52,6 +52,8 @@ end
 
 group :production do
   gem 'pg'
+  gem "sentry-ruby"
+  gem "sentry-rails"
 end
 
 group :development, :test do
@@ -89,6 +91,4 @@ gem "litestream", "~> 0.12.0"
 gem "aws-sdk-s3", "~> 1.182", :require => false
 gem 'stringio', '~> 3.1.5'
 gem 'logger', '~> 1.6.6'
-gem "sentry-ruby"
-gem "sentry-rails"
 gem 'httparty'
