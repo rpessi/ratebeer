@@ -8,4 +8,11 @@ if Rails.env.production?
     # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
     config.send_default_pii = true
   end
+else
+  # Define a mock Sentry module for non-production environments to avoid errors
+  module Sentry
+    def self.get_trace_propagation_meta
+      ""
+    end
+  end
 end
