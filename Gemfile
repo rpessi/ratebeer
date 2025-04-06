@@ -92,3 +92,6 @@ gem "aws-sdk-s3", "~> 1.182", :require => false
 gem 'stringio', '~> 3.1.5'
 gem 'logger', '~> 1.6.6'
 gem 'httparty'
+gem 'bootstrap', '~> 5.2.0'
+gem 'jquery-rails'
+gem 'mini_racer'

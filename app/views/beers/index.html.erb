@@ -1,26 +1,25 @@
-<p style="color: green"><%= notice %></p>
-
 <h1>Beers</h1>
 
 <div id="beers">
-  <% @beers.each do |beer| %>
-    <div id="<%= dom_id beer %>">
-      <p>
-        <strong>Name:</strong>
-        <%= link_to beer.name, beer %>
-      </p>
-
-      <p>
-        <strong>Style:</strong>
-        <%= beer.style.name %>
-      </p>
-
-      <p>
-      <strong>Brewery:</strong>
-      <%= link_to beer.brewery.name, beer.brewery %>
-      </p>
-    </div>
-  <% end %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Beer</th>
+        <th scope="col">Style</th>
+        <th scope="col">Brewery</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @beers.each do |beer| %>
+        <tr>
+          <th scope="row"><%= link_to beer.name, beer %></th>
+          <td><%= link_to beer.style, beer.style.name %></td>
+          <td><%= link_to beer.brewery.name, beer.brewery %></td>
+          <td><%= beer.average_rating %></td>
+        </tr>
+      <% end %>
+  </table>
 </div>
 
 <%= link_to('New Beer', new_beer_path) if current_user %>

@@ -5,7 +5,7 @@ class BeersController < ApplicationController
 
   # GET /beers or /beers.json
   def index
-    @beers = Beer.all
+    @beers = Beer.order(:brewery_id)
     # render :index - renderöidään, vaikkei kerrota
   end
 
