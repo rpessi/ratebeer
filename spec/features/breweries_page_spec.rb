@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include Helpers
+
 describe "Breweries page" do
   it "should not have any before been created" do
     visit breweries_path
@@ -33,6 +35,98 @@ describe "Breweries page" do
       
       expect(page).to have_content "Koff"
       expect(page).to have_content "Established in: 1897"
+    end
+
+    describe "it allows a signed in user" do
+      before :each do
+        FactoryBot.create :user
+        @brewery = FactoryBot.create :brewery
+      end
+
+      it "to create a new brewery with valid credentials" do
+        sign_in(username: "Pekka", password: "Foobar1")
+        visit new_brewery_path
+        fill_in('brewery_name', with: 'Old Factory Brewery')
+        fill_in('brewery_year', with: '1968')
+        
+        expect{
+          click_button('Create Brewery')
+        }.to change{Brewery.count}.by(1)
+        expect(page).to have_content "Old Factory Brewery"
+        expect(page).to have_content "Established in: 1968"
+        expect(page).to have_content "Brewery was successfully created."
+      end
+
+      it "to update a brewery" do
+        sign_in(username: "Pekka", password: "Foobar1")
+        visit brewery_path(@brewery)
+        click_link "Edit this brewery"
+        fill_in('brewery_name', with: 'Updated Brewery')
+        expect{
+          click_button('Update Brewery')
+        }.to change{Brewery.count}.by(0)
+        expect(page).to have_content "Brewery was successfully updated."
+        expect(page).to have_content "Updated Brewery"
+      end
+
+      it "to delete a brewery" do
+        sign_in(username: "Pekka", password: "Foobar1")
+        visit brewery_path(@brewery)
+        expect{
+          click_button 'Destroy this brewery'
+        }.to change{Brewery.count}.by(-1)
+        expect(page).to have_content "Brewery was successfully destroyed."
+      end
+
+      describe "to make no changes with invalid credentials" do
+        it "will not create new brewery with no name" do
+          sign_in(username: "Pekka", password: "Foobar1")
+          visit new_brewery_path
+          fill_in('brewery_name', with: '')
+          fill_in('brewery_year', with: '1968')
+
+          expect{
+            click_button('Create Brewery')
+          }.to change{Brewery.count}.by(0)
+          expect(page).to have_content "Name can't be blank"
+        end
+
+        it "will not create new brewery with no year" do
+          sign_in(username: "Pekka", password: "Foobar1")
+          visit new_brewery_path
+          fill_in('brewery_name', with: 'Old Factory Brewery')
+          fill_in('brewery_year', with: '')
+
+          expect{
+            click_button('Create Brewery')
+          }.to change{Brewery.count}.by(0)
+          expect(page).to have_content "Year can't be blank"
+        end
+
+        it "will not update brewery with no name" do
+          sign_in(username: "Pekka", password: "Foobar1")
+          visit brewery_path(@brewery)
+          click_link('Edit this brewery')
+          fill_in('brewery_name', with: '')
+
+          expect{
+            click_button('Update Brewery')
+          }.to change{Brewery.count}.by(0)
+          expect(page).to have_content "Name can't be blank"
+        end
+
+        it "will not update brewery with no year" do
+          sign_in(username: "Pekka", password: "Foobar1")
+          visit brewery_path(@brewery)
+          click_link('Edit this brewery')
+          fill_in('brewery_year', with: '')
+
+          expect{
+            click_button('Update Brewery')
+          }.to change{Brewery.count}.by(0)
+          expect(page).to have_content "Year can't be blank"
+        end
+      end
     end
   end
 end

@@ -15,9 +15,7 @@ describe "Beers page" do
       visit new_beer_path
       fill_in('beer_name', with: 'Tasty Lager' )
       select(@beer.style)
-      puts @beer.style
       select(@beer.brewery.name)
-      puts@beer.brewery.name
       expect{
         click_button('Create Beer')
       }.to change{Beer.count}.by(1)
