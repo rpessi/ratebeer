@@ -21,10 +21,11 @@ class StylesController < ApplicationController
 
     respond_to do |format|
       if @style.save
-        format.html { redirect_to @style, notice: "Style was suffesfully created" }
+        format.html { redirect_to @style, notice: "Style was successfully created" }
         format.json { render :show, status: :created, location: @style }
       else
-        format.html { render :new, status: unprocessable_entity }
+        @styles = Style.all
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @style.errors, status: unprocessable_entity }
       end
     end
@@ -32,12 +33,12 @@ class StylesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @style.save
-        format.html { redirect_to @style, notice: "Style was suffesfully updated" }
+      if @style.update(style_params)
+        format.html { redirect_to @style, notice: "Style was succesfully updated" }
         format.json { render :show, status: :created, location: @style }
       else
-        format.html { render :new, status: unprocessable_entity }
-        format.json { render json: @style.errors, status: unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @style.errors, status: :unprocessable_entity }
       end
     end
   end
