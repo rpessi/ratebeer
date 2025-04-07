@@ -6,6 +6,8 @@ class Rating < ApplicationRecord
                                     less_than_or_equal_to: 50,
                                     only_integer: true }
 
+  scope :latest, -> { reverse_order[..4] }
+
   # check if replaced _everywhere_ with to_s before removing
   def print_report
     "#{beer.name} #{score}"

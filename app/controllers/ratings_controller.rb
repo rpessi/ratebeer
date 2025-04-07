@@ -2,7 +2,9 @@ class RatingsController < ApplicationController
   before_action :set_rating, only: %i[show]
 
   def index
-    @ratings = Rating.all
+    @top_breweries = Brewery.top 3
+    @top_beers = Beer.top 3
+    @last_ratings = Rating.latest
     # render :index - renderöidään oletusarvona
   end
 

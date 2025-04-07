@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_05_121655) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_07_134453) do
   create_table "beer_clubs", force: :cascade do |t|
     t.string "name"
     t.integer "founded"
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_05_121655) do
     t.integer "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
   end
 
   create_table "memberships", force: :cascade do |t|

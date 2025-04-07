@@ -1,9 +1,28 @@
-<h2>List of ratings</h2>
-<%= "Number of ratings: #{@ratings.count}" %>
+<h2>Top beers</h2>
 
-<div id="ratings">
+<div id="top_beers">
   <ul>
-    <% @ratings.each do |rating| %>
+    <% @top_beers.each do |beer| %>
+      <li> <%= link_to beer.name, beer %><%= ": #{beer.average_rating}" %> </li>
+    <% end %>
+  </ul>
+</div>
+
+<h2>Top breweries</h2>
+
+<div id="top_breweries">
+  <ul>
+    <% @top_breweries.each do |brewery| %>
+      <li> <%= link_to brewery.name, brewery %><%= ": #{brewery.average_rating}" %> </li>
+    <% end %>
+  </ul>
+</div>
+
+<h2>Latest ratings</h2>
+
+<div id="last_ratings">
+  <ul>
+    <% @last_ratings.each do |rating| %>
       <% user = rating.user %>
       <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
     <% end %>

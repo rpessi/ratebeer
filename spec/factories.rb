@@ -8,6 +8,7 @@ FactoryBot.define do
   factory :brewery do
     name { "Factory Brewery" }
     year { 1900 }
+    active { true }
   end
 
   factory :style do

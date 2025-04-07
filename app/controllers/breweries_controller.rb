@@ -4,8 +4,8 @@ class BreweriesController < ApplicationController
 
   # GET /breweries or /breweries.json
   def index
-    @breweries = Brewery.order("name")
-    # render :index - renderöidään oletusarvoisesti
+    @active_breweries = Brewery.active.order("name")
+    @retired_breweries = Brewery.retired.order("name")
   end
 
   # GET /breweries/1 or /breweries/1.json
@@ -68,6 +68,6 @@ class BreweriesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def brewery_params
-    params.require(:brewery).permit(:name, :year)
+    params.require(:brewery).permit(:name, :year, :active)
   end
 end

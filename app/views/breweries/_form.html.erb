@@ -21,6 +21,11 @@
     <%= form.number_field :year, class: "form-control", placeholder: 1920 %>
   </div>
 
+  <div class="form-check">
+  <%= form.label :active, class: "form-check-label" %> 
+  <%= form.check_box :active, class: "form-check-input", type: "checkbox" %>
+  </div>
+  <br>
   <div>
     <%= form.submit class:'btn btn-primary btn-sm' %>
   </div>
