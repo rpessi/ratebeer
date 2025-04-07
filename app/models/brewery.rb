@@ -38,7 +38,7 @@ class Brewery < ApplicationRecord
   end
 
   def self.top(number)
-    sorted = Brewery.all.sort_by{ |brewery| brewery.average_rating }.reverse
+    sorted = Brewery.all.sort_by(&:average_rating).reverse
     sorted[..number - 1]
   end
 end
