@@ -42,7 +42,43 @@ describe "Beer clubs page" do
         expect(page).to have_content "Welcome to the club, Pekka."
         expect(user.memberships.count).to eq(1)
       end
-    end
 
+      it "it allows the user to create a new beer club with valid credentials" do
+        visit new_beer_club_path
+        fill_in('beer_club_name', with: 'New Factory Beerclub')
+        fill_in('beer_club_founded', with: 1968)
+        fill_in('beer_club_city', with: 'Helsinki')
+
+        expect{
+          click_button('Create Beer club')
+        }.to change{BeerClub.count}.by(1)
+        expect(page).to have_content "New Factory Beerclub"
+        expect(page).to have_content "Founded: 1968"
+        expect(page).to have_content "Beer club was successfully created."
+      end
+
+      it "allows the user to edit a beer club" do
+        visit beer_club_path(beer_club)
+        expect(page).to have_content "Maistajat"
+        click_link('Edit this beer club')
+        fill_in('beer_club_name', with: 'Wanhat Maistajat')
+
+        expect{
+          click_button('Update Beer club')
+        }.to change{BeerClub.count}.by(0)
+        expect(page).to have_content "Wanhat Maistajat"
+        expect(page).to have_content "Founded: 2000"
+        expect(page).to have_content "Beer club was successfully updated."
+      end
+
+      it "allows the user to delete a beer club" do
+        visit beer_club_path(beer_club)
+        expect{
+          click_button('Destroy this beer club')
+        }.to change{BeerClub.count}.by(-1)
+        expect(page).to have_content "Beer club was successfully destroyed."
+        expect(page).to_not have_content "Maistajat"
+      end
+    end
   end
 end
