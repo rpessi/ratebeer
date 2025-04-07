@@ -4,25 +4,24 @@
   City <%= form.text_field :city %>
   <%= form.submit "Search" %>
 <% end %>
-
-<% if @places %>
-  <table>
-    <thead>
-      <% Place.rendered_fields.each do |field| %>
-        <th><%= field %></th>
+<div id="places">
+  <% if @places %>
+  <h3><%= "Beer places in #{@places.first.city}" %></h3>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Zip</th>
+        </tr>
+      </thead>
+      <% @places.each do |place| %>
+        <tr>
+          <th scope="row"><%= link_to place.name,  place_path(place.id)%></th>
+          <td><%= place.status %></td>
+          <td><%= place.zip %></td>
+        </tr>
       <% end %>
-    </thead>
-    <% @places.each do |place| %>
-      <tr>
-        <td><%= place.id %></td>
-        <td><%= link_to place.name,  place_path(place.id)%></td>
-        <td><%= place.status %></td>
-        <td><%= place.street %></td>
-        <td><%= place.city %></td>
-        <td><%= place.zip %></td>
-        <td><%= place.country %></td>
-        <td><%= place.overall %></td>
-      </tr>
-    <% end %>
-  </table>
-<% end %>
+    </table>
+  <% end %>
+</div>

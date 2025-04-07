@@ -9,6 +9,4 @@
   </ul>
 </div>
 
-<% if current_user %>
-  <%= link_to "Create new style", new_style_path(@style) %>
-<% end %>
+<%= link_to("Create new style", new_style_path(@style), class:'btn btn-primary') if current_user %>

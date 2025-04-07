@@ -7,7 +7,7 @@
       <%= form_with(model: @membership, url: membership_path(membership), method: :delete) do |form| %>
         <%= form.hidden_field :beer_club_id, value: @beer_club.id %>
         <%= form.hidden_field :user_id, value: current_user.id %>
-        <%= form.submit "End the membership" %>
+        <%= form.submit("End the membership", class:'btn btn-danger btn-sm') %>
       <% end %>
     <% else %>
       <h4>Join this beer club:</h4>
@@ -21,7 +21,7 @@
   <br>
     <%= link_to "Edit this beer club", edit_beer_club_path(@beer_club) if current_user %> |
     <%= link_to "Back to beer clubs", beer_clubs_path %>
-    <%= button_to "Destroy this beer club", @beer_club, method: :delete if current_user %>
+    <%= button_to("Destroy this beer club", @beer_club, method: :delete, class:'btn btn-danger btn-sm') if current_user %>
   <% else %>
     <%= link_to "Back to beer clubs", beer_clubs_path %>
   <% end %>

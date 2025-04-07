@@ -11,17 +11,17 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-2">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Imatran Kuohu" %>
+  </div>
+
+  <div class="mb-2">
+    <%= form.label :year, class: "form-label" %>
+    <%= form.number_field :year, class: "form-control", placeholder: 1920 %>
   </div>
 
   <div>
-    <%= form.label :year, style: "display: block" %>
-    <%= form.number_field :year %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit class:'btn btn-primary btn-sm' %>
   </div>
 <% end %>

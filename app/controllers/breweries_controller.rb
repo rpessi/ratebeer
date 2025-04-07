@@ -4,7 +4,7 @@ class BreweriesController < ApplicationController
 
   # GET /breweries or /breweries.json
   def index
-    @breweries = Brewery.all
+    @breweries = Brewery.order("name")
     # render :index - renderöidään oletusarvoisesti
   end
 
