@@ -32,4 +32,9 @@ FactoryBot.define do
     name { "Factory Beer Club"}
     founded { 2000 }
   end
+
+  factory :membership do
+    user
+    beer_club
+  end
 end

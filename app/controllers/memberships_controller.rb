@@ -12,6 +12,7 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/new
   def new
+    @memberships = Membership.all
     @membership = Membership.new
     @beer_clubs = BeerClub.all
     @user = current_user
@@ -19,6 +20,8 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/1/edit
   def edit
+    @beer_clubs = BeerClub.all
+    @user = current_user
   end
 
   # POST /memberships or /memberships.json
@@ -31,6 +34,7 @@ class MembershipsController < ApplicationController
         format.html { redirect_to @beer_club, notice: "Welcome to the club, #{@member}." }
       else
         @membership = Membership.find_by(membership_params)
+        @beer_club = BeerClub.find(@membership.beer_club_id)
         format.html { redirect_to @beer_club, notice: "You are already a member." }
       end
       format.json { render :show, status: :created, location: @membership }
