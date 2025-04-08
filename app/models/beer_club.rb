@@ -5,8 +5,4 @@ class BeerClub < ApplicationRecord
   def to_s
     "#{name}, #{city}"
   end
-
-  def member_names
-    members.map(& :username)
-  end
 end

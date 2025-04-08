@@ -34,7 +34,7 @@ class Brewery < ApplicationRecord
 
   def restart
     self.year = 2022
-    puts "changed year to #{year}"
+    puts "Changed year to #{year}"
   end
 
   def self.top(number)

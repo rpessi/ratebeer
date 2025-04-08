@@ -8,11 +8,6 @@ class Rating < ApplicationRecord
 
   scope :latest, -> { reverse_order[..4] }
 
-  # check if replaced _everywhere_ with to_s before removing
-  def print_report
-    "#{beer.name} #{score}"
-  end
-
   def to_s
     "#{beer.name} #{score}"
   end
