@@ -8,13 +8,11 @@ class PlacesController < ApplicationController
       redirect_to places_path, notice: "No locations in #{params[:city]}"
     else
       session[:last_places] = @places.to_h do |place|
-        [place.id, {
-          name: place.name,
-          city: place.city,
-          street: place.street,
-          status: place.status,
-          zip: place.zip
-        }]
+        [place.id, { name: place.name,
+                     city: place.city,
+                     street: place.street,
+                     status: place.status,
+                     zip: place.zip }]
       end
       render :index, status: 418
     end

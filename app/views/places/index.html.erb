@@ -1,7 +1,7 @@
 <h1>Beer places search</h1>
 
 <%= form_with url: places_path, method: :post do |form| %>
-  City <%= form.text_field :city %>
+  City <%= form.text_field :city, required: true, placeholder: "Enter a city" %>
   <%= form.submit "Search" %>
 <% end %>
 <div id="places">
