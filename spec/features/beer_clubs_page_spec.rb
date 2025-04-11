@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include Helpers
+
 describe "Beer clubs page" do
   let!(:user) { FactoryBot.create :user }
   let!(:beer_club) {FactoryBot.create :beer_club, name: "Maistajat"}
@@ -60,11 +62,11 @@ describe "Beer clubs page" do
       it "allows the user to edit a beer club" do
         visit beer_club_path(beer_club)
         expect(page).to have_content "Maistajat"
-        click_link('Edit this beer club')
+        click_link('Update')
         fill_in('beer_club_name', with: 'Wanhat Maistajat')
 
         expect{
-          click_button('Update Beer club')
+          click_button('Update')
         }.to change{BeerClub.count}.by(0)
         expect(page).to have_content "Wanhat Maistajat"
         expect(page).to have_content "Founded: 2000"
@@ -74,7 +76,7 @@ describe "Beer clubs page" do
       it "allows the user to delete a beer club" do
         visit beer_club_path(beer_club)
         expect{
-          click_button('Destroy this beer club')
+          click_link('Destroy')
         }.to change{BeerClub.count}.by(-1)
         expect(page).to have_content "Beer club was successfully destroyed."
         expect(page).to_not have_content "Maistajat"

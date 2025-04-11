@@ -18,7 +18,7 @@
       <tr>
         <th scope="row"><%= link_to brewery.name, brewery %></th>
         <td><%= brewery.year %></td>
-        <td><%= brewery.average_rating %></td>
+        <td><%= round(brewery.average_rating) %></td>
       </tr> 
       <% end %>
   </table>
@@ -42,7 +42,7 @@
       <tr>
         <th scope="row"><%= link_to brewery.name, brewery %></th>
         <td><%= brewery.year %></td>
-        <td><%= brewery.average_rating %></td>
+        <td><%= round(brewery.average_rating) %></td>
       </tr> 
       <% end %>
   </table>

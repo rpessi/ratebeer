@@ -43,10 +43,7 @@
 </div>
 
 <div>
-  <% if @user == current_user %>
-    <%= link_to "Edit this user", edit_user_path(@user) %>
-    <%= button_to("Destroy this user", @user, method: :delete, class:"btn btn-danger btn-sm") %>
-  <% end %>
+  <%= edit_and_destroy_buttons(@user) if @user == current_user%>
   <p></p>
   <%= link_to "Back to users", users_path %>
 </div>

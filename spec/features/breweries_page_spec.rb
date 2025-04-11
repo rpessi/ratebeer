@@ -60,7 +60,7 @@ describe "Breweries page" do
       it "to update a brewery" do
         sign_in(username: "Pekka", password: "Foobar1")
         visit brewery_path(@brewery)
-        click_link "Edit this brewery"
+        click_link "Update"
         fill_in('brewery_name', with: 'Updated Brewery')
         expect{
           click_button('Update Brewery')
@@ -73,7 +73,7 @@ describe "Breweries page" do
         sign_in(username: "Pekka", password: "Foobar1")
         visit brewery_path(@brewery)
         expect{
-          click_button 'Destroy this brewery'
+          click_link 'Destroy'
         }.to change{Brewery.count}.by(-1)
         expect(page).to have_content "Brewery was successfully destroyed."
       end
@@ -106,11 +106,11 @@ describe "Breweries page" do
         it "will not update brewery with no name" do
           sign_in(username: "Pekka", password: "Foobar1")
           visit brewery_path(@brewery)
-          click_link('Edit this brewery')
+          click_link('Update')
           fill_in('brewery_name', with: '')
 
           expect{
-            click_button('Update Brewery')
+            click_button('Update')
           }.to change{Brewery.count}.by(0)
           expect(page).to have_content "Name can't be blank"
         end
@@ -118,7 +118,7 @@ describe "Breweries page" do
         it "will not update brewery with no year" do
           sign_in(username: "Pekka", password: "Foobar1")
           visit brewery_path(@brewery)
-          click_link('Edit this brewery')
+          click_link('Update')
           fill_in('brewery_year', with: '')
 
           expect{

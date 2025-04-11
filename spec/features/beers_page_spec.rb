@@ -52,7 +52,7 @@ describe "Beers page" do
 
       it "will allow a beer to be updated" do
         visit beer_path(@beer)
-        click_link "Edit this beer"
+        click_link "Update"
         expect(page).to have_content "Editing beer"
         fill_in('beer[name]', with: 'Better Factory Beer' )
         click_button('Update Beer')
@@ -64,7 +64,7 @@ describe "Beers page" do
       it "will allow a beer to be destroyed" do
         visit beer_path(@beer)
         expect{
-          click_button "Destroy this beer"
+          click_link "Destroy"
         }.to change{Beer.count}.by(-1)
         expect(page).to have_content "Beer was successfully destroyed."
       end

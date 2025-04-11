@@ -44,8 +44,8 @@ describe "Memberships page" do
       it "allows the user to update the membership" do
         visit membership_path(@membership2)
         expect(Membership.count).to eq(2)
-        expect(page).to have_content "Edit this membership"
-        click_link "Edit this membership"
+        expect(page).to have_content "Update"
+        click_link "Update"
         select('New Club', from:'membership[beer_club_id]')
         click_button "Update Membership"
         expect(Membership.count).to eq(2)
@@ -55,10 +55,10 @@ describe "Memberships page" do
 
       it "allows the user to end the membership" do
         visit membership_path(@membership2)
-        expect(page).to have_button "Destroy this membership"
+        expect(page).to have_link "Destroy"
         expect(page).to have_content "User: #{user.username}"
         expect{
-          click_button "Destroy this membership"
+          click_link "Destroy"
         }.to change{Membership.count}.from(2).to(1)
         expect(page).to have_content "Membership in #{beer_club.name} ended."
       end

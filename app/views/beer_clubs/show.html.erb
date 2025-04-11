@@ -18,11 +18,8 @@
         <%= form.submit "Join the beer club" %>
       <% end %>
     <% end %>
-  <br>
-    <%= link_to "Edit this beer club", edit_beer_club_path(@beer_club) if current_user %> |
-    <%= link_to "Back to beer clubs", beer_clubs_path %>
-    <%= button_to("Destroy this beer club", @beer_club, method: :delete, class:'btn btn-danger btn-sm') if current_user %>
-  <% else %>
-    <%= link_to "Back to beer clubs", beer_clubs_path %>
   <% end %>
+  <br>
+  <%= edit_and_destroy_buttons(@beer_club)%>
+  <%= link_to "Back to beer clubs", beer_clubs_path %>
 </div>

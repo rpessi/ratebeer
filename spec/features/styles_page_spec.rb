@@ -37,7 +37,7 @@ describe "Styles page" do
         }.to change{Style.count}.by(1)
         expect(page).to have_content "Style was successfully created"
         expect(page).to have_content "Name: Factory IPA"
-        expect(page).to have_content "Description: Factory IPA style"
+        expect(page).to have_content "Factory IPA style"
       end
 
       it "will not create a new style with no name" do
@@ -74,7 +74,7 @@ describe "Styles page" do
         }.to change{Style.count}.by(1)
         expect(page).to have_content "Style was successfully created"
         expect(page).to have_content "Name: Factory IPA"
-        click_link("Edit this style")
+        click_link("Update")
         fill_in('style_name', with: 'New Factory IPA')
         expect{
           click_button('Update Style')
@@ -89,7 +89,7 @@ describe "Styles page" do
         expect(Beer.count).to eq(1)
         visit style_path(@style)
         expect{
-          click_button('Destroy this style')
+          click_link('Destroy')
         }.to change{Style.count}.by(-1)
         expect(Beer.count).to eq(0) 
         expect(page).to have_content "Style was successfully destroyed"

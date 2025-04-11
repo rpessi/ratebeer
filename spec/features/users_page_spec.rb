@@ -26,7 +26,7 @@ describe "User" do
     it "can update the password" do
       sign_in(username: "Pekka", password: "Foobar1")
       visit user_path(@user)
-      click_link('Edit this user')
+      click_link('Update')
       fill_in('user_password', with: "Foobar2")
       fill_in('user_password_confirmation', with: "Foobar2")
       expect{
@@ -39,7 +39,7 @@ describe "User" do
       sign_in(username: "Pekka", password: "Foobar1")
       visit user_path(@user)
       expect{
-        click_button('Destroy this user')
+        click_link('Destroy')
       }.to change{User.count}.by(-1)
       expect(page).to have_content "User was successfully destroyed."
     end

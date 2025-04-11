@@ -9,11 +9,8 @@
       Score: <%= form.number_field :score %>
       <%= form.submit "Create rating", class:"btn btn-primary" %>
     <% end %>
-    <br>
-    <%= link_to "Edit this beer", edit_beer_path(@beer) %> |
-    <%= link_to "Back to beers", beers_path %>
-    <%= button_to("Destroy this beer", @beer, method: :delete, class:"btn btn-danger btn-sm") if current_user %>
-  <% else %>
-    <%= link_to "Back to beers", beers_path %>
   <% end %>
+    <br>
+  <%= edit_and_destroy_buttons(@beer)%>
+  <%= link_to "Back to beers", beers_path %>
 </div>

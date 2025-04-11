@@ -1,8 +1,6 @@
 <%= render @membership %>
 
 <div>
-  <%= link_to "Edit this membership", edit_membership_path(@membership) %> |
+  <%= edit_and_destroy_buttons(@membership)%>
   <%= link_to "Back to memberships", memberships_path %>
-
-  <%= button_to("Destroy this membership", @membership, method: :delete, class:"btn btn-danger btn-sm") %>
 </div>

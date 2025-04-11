@@ -16,7 +16,7 @@
           <th scope="row"><%= link_to beer.name, beer %></th>
           <td><%= link_to beer.style, beer.style.name %></td>
           <td><%= link_to beer.brewery.name, beer.brewery %></td>
-          <td><%= beer.average_rating %></td>
+          <td><%= round(beer.average_rating) %></td>
         </tr>
       <% end %>
   </table>
