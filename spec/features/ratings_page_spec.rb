@@ -30,6 +30,10 @@ describe "Rating" do
     expect(user.ratings.count).to eq(1)
     expect(beer1.ratings.count).to eq(1)
     expect(beer1.average_rating).to eq(15.0)
+
+    @rating = FactoryBot.create(:rating, beer: beer1, user: user)
+    visit ratings_path(@rating)
+    expect(page).to have_content ""
   end
 
   it "will show the latest ratings" do
@@ -41,17 +45,18 @@ describe "Rating" do
     expect(page).to have_content "Factory Beer 10"
   end
 
-  it "will show the best rated beers" do
+  it "will show three best rated beers" do
     create_beers_with_many_ratings({user: user}, 10, 20, 15, 7, 9)
     visit ratings_path
 
-    expect(page).to have_content "Top beers"
-    expect(page).to have_content "Factory Beer: 20.0"
-    expect(page).to have_content "Factory Beer: 15.0"
-    expect(page).to have_content "Factory Beer: 10.0"
+    expect(page).to have_content "Best beers"
+    expect(page).to have_content "Factory Beer"
+    expect(page).to have_content "20.0"
+    expect(page).to have_content "10.0"
+    expect(page).to_not have_content "9.0"
   end
 
-  it "will show the best rated breweries" do
+  it "will show three best rated breweries" do
     scores = [10, 15, 20, 25, 30, 35]
     beers = [beer1, beer2, beer3, beer4, beer5, beer6]
     beers.zip(scores).each do |beer, score|
@@ -59,9 +64,12 @@ describe "Rating" do
     end
     visit ratings_path
 
-    expect(page).to have_content "Koff: 12.5"
-    expect(page).to have_content "Laitila: 22.5"
-    expect(page).to have_content "Olvi: 32.5"
+    expect(page).to have_content "Koff"
+    expect(page).to have_content "12.5"
+    expect(page).to have_content "Laitila"
+    expect(page).to have_content "22.5"
+    expect(page).to have_content "Olvi"
+    expect(page).to have_content "32.5"
   end
 
   it "will show the ratings given by the user on user's page" do

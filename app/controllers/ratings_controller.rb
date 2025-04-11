@@ -1,10 +1,10 @@
 class RatingsController < ApplicationController
-  before_action :set_rating, only: %i[show]
-
   def index
     @top_breweries = Brewery.top 3
     @top_beers = Beer.top 3
-    @last_ratings = Rating.latest
+    @top_styles = Style.top 3
+    @top_raters = Rating.top 3
+    @last_ratings = Rating.last 5
     # render :index - renderöidään oletusarvona
   end
 
@@ -29,18 +29,5 @@ class RatingsController < ApplicationController
     rating = Rating.find(params[:id])
     rating.delete if current_user == rating.user
     redirect_to user_path(current_user)
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints
-  # between actions.
-  def set_rating
-    @rating = Rating.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def rating_params
-    params.require(:rating).permit(:score, :beer_id)
   end
 end

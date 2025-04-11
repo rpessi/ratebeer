@@ -81,7 +81,18 @@ describe "Styles page" do
         }.to change{Style.count}.by(0)
         expect(page).to have_content "Style was succesfully updated"
         expect(page).to have_content "New Factory IPA"
+      end
 
+      it "will let user delete a style" do
+        sign_in(username: "Pekka", password: "Foobar1")
+        FactoryBot.create(:beer, style: @style)
+        expect(Beer.count).to eq(1)
+        visit style_path(@style)
+        expect{
+          click_button('Destroy this style')
+        }.to change{Style.count}.by(-1)
+        expect(Beer.count).to eq(0) 
+        expect(page).to have_content "Style was successfully destroyed"
       end
     end
 

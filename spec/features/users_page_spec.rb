@@ -41,7 +41,14 @@ describe "User" do
       expect{
         click_button('Destroy this user')
       }.to change{User.count}.by(-1)
-    expect(page).to have_content "User was successfully destroyed."
+      expect(page).to have_content "User was successfully destroyed."
+    end
+
+    it "can sign out" do
+      sign_in(username: "Pekka", password: "Foobar1")
+      click_link('Sign out')
+      expect(page).to have_content "Sign up"
+      expect(page).to have_content "Sign in"
     end
 
     it "cannot delete another user" do

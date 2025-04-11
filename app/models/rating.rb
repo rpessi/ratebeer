@@ -11,4 +11,13 @@ class Rating < ApplicationRecord
   def to_s
     "#{beer.name} #{score}"
   end
+
+  # users with most ratings, @top_raters
+  def self.top(number)
+    User.all.sort_by { |user| user.ratings.count }.reverse[..number - 1]
+  end
+
+  def self.last(number)
+    Rating.all.sort_by(&:updated_at).reverse[..number - 1]
+  end
 end

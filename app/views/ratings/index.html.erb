@@ -1,30 +1,52 @@
-<h2>Top beers</h2>
+<h1>Ratings</h1>
+<br>
+<div class="container text-left">
+  <div class="row">
+    <div class="col-sm-4"><h3>Best beers</h3></div>
+    <div class="col-sm-4"><h3>Best breweries</h3></div>
+    <div class="col-sm-4"><h3>Best styles</h3></div>
+  </div>
+  <div class="row">
+    <div class="col-sm"><strong>Beer</strong></div>
+    <div class="col-sm"><strong>Average</strong></div>
+    <div class="col-sm"><strong>Brewery</strong></div>
+    <div class="col-sm"><strong>Average</strong></div>
+    <div class="col-sm"><strong>Style</strong></div>
+    <div class="col-sm"><strong>Average</strong></div>
+  </div>
 
-<div id="top_beers">
-  <ul>
-    <% @top_beers.each do |beer| %>
-      <li> <%= link_to beer.name, beer %><%= ": #{beer.average_rating}" %> </li>
+  <% 3.times do |n| %>
+    <div class="row">
+      <% beer = @top_beers[n] %>
+        <div class="col-sm" id="top_beers"><%= beer&.name || "N/A" %></div>
+        <div class="col-sm" id="top_beers"><%= beer&.average_rating || "N/A" %></div>
+      <% brewery = @top_breweries[n] %>
+        <div class="col-sm" id="top_breweries"><%= brewery&.name %></div>
+        <div class="col-sm" id="top_breweries"><%= brewery&.average_rating || "N/A" %></div>
+      <% style, score = @top_styles[n] %>
+        <div class="col-sm" id="top_styles"><%= style || "N/A" %></div>
+        <div class="col-sm" id="top_styles"><%= score || "N/A"%></div>
+    </div>
+  <% end %>
+</div>
+<br>
+<h4>Most active users</h4>
+
+<div id="top_raters">
+  <ol>
+    <% @top_raters.each do |rater| %>
+      <li> <%= "#{rater.username} #{rater.ratings.count} #{'rating'.pluralize(rater.ratings.count)}" %> </li>
     <% end %>
-  </ul>
+  </ol>
 </div>
 
-<h2>Top breweries</h2>
-
-<div id="top_breweries">
-  <ul>
-    <% @top_breweries.each do |brewery| %>
-      <li> <%= link_to brewery.name, brewery %><%= ": #{brewery.average_rating}" %> </li>
-    <% end %>
-  </ul>
-</div>
-
-<h2>Latest ratings</h2>
+<h4>Recent ratings</h4>
 
 <div id="last_ratings">
   <ul>
     <% @last_ratings.each do |rating| %>
       <% user = rating.user %>
-      <li> <%= rating.to_s %> <%= link_to user.username, user %> </li>
+      <li> <%= rating.to_s %> </li>
     <% end %>
   </ul>
 </div>
