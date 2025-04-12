@@ -78,7 +78,7 @@ describe "Rating" do
     fill_in('rating[score]', with: '15')
     click_button "Create Rating"
 
-    expect(page).to have_content "User has made 1 rating"
+    expect(page).to have_content "#{user.username} has made 1 rating"
     expect(page).to have_content "Iso 3 15"
 
     visit new_rating_path
@@ -86,7 +86,7 @@ describe "Rating" do
     fill_in('rating[score]', with: '18')
     click_button "Create Rating"
 
-    expect(page).to have_content "User has made 2 ratings"
+    expect(page).to have_content "#{user.username} has made 2 ratings"
     expect(page).to have_content "Karhu 18"
   end
 

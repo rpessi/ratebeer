@@ -15,12 +15,13 @@ class User < ApplicationRecord
   has_many :beer_clubs, through: :memberships
 
   scope :admin, -> { where(admin: true) }
+  scope :blocked, -> { where(blocked: true) }
 
   def rating_summary
     if ratings.count == 0
-      "User has no ratings."
+      "#{username} has no ratings."
     else
-      "User has made #{ratings.count} #{'rating'.pluralize(ratings.count)}, average rating #{average_rating}"
+      "#{username} has made #{ratings.count} #{'rating'.pluralize(ratings.count)}, average rating #{average_rating}"
     end
   end
 

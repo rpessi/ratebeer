@@ -2,8 +2,23 @@
 
 <div id="users">
   <% @users.each do |user| %>
+    <h3>
+      <%= "#{user.username}" %>
+    </h3>
+    <% if user.blocked? && current_user&.admin? %>
+      <span class="badge bg-primary">Account closed</span>
+    <% end %>
     <p>
-      <%= link_to user.username, user %>
+      <%= user.rating_summary %>
+    </p>
+    <p>
+      <%= "Favorite beer style: #{user.favorite_style}" unless user.ratings.empty? %>
+    </p>
+    <p>
+      <%= "Favorite brewery: #{user.favorite_brewery}" unless user.ratings.empty? %>
+    </p>
+    <p>
+      <%= link_to "Show this user", user %>
     </p>
   <% end %>
 </div>

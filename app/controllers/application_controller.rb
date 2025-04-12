@@ -14,4 +14,8 @@ class ApplicationController < ActionController::Base
   def set_admin
     @admin = current_user&.admin?
   end
+
+  def set_blocked_users
+    @blocked_users = User.blocked
+  end
 end

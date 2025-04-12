@@ -6,6 +6,7 @@ describe "User" do
   before :each do
     @user = FactoryBot.create :user
     @user2 = FactoryBot.create(:user, username: "Bob")
+    @blocked_user = FactoryBot.create(:user, :blocked, username: "Blocked")
   end
 
   describe "who has signed up" do
@@ -14,6 +15,12 @@ describe "User" do
 
       expect(page).to have_content 'Welcome back!'
       expect(page).to have_content 'Pekka'
+    end
+
+    it "cannot sign in, if the user account is blocked " do
+      sign_in(username: "Blocked", password: "Foobar1")
+      expect(page).to have_content "Your account is closed, please contact with admin"
+
     end
 
     it "is redirected back to signin form if wrong credentials given" do
@@ -61,14 +68,14 @@ describe "User" do
       it "shows no favorite beer style if user has no ratings" do
         visit user_path(@user)
 
-        expect(page).to have_content "User has no ratings"
+        expect(page).to have_content "#{@user.username} has no ratings"
         expect(page).not_to have_content "Favorite beer style"
       end
 
       it "shows no favorite brewery if user has no ratings" do
         visit user_path(@user)
 
-        expect(page).to have_content "User has no ratings"
+        expect(page).to have_content "#{@user.username} has no ratings"
         expect(page).not_to have_content "Favorite brewery"
       end
 
@@ -86,6 +93,64 @@ describe "User" do
 
         expect(page).to have_content "Favorite brewery"
         expect(page).to have_content @user.favorite_brewery
+      end
+    end
+
+    describe "but has no admin status" do 
+      before :each do
+        sign_in(username: "Pekka", password: "Foobar1")
+      end
+
+      it "cannot see which user accounts have been closed" do
+        visit users_path
+        expect(User.blocked.count).to eq(1)
+        expect(page).to_not have_content "Account closed"
+        visit user_path(@blocked_user)
+        expect(page).to_not have_content "Account closed"
+      end
+
+      it "cannot change the account status" do
+        visit user_path(@user2)
+        expect(@user2.blocked).to eq(false)
+        expect(page).to_not have_link "Close account"
+        visit user_path(@blocked_user)
+        expect(@blocked_user.blocked).to eq(true)
+        expect(page).to_not have_link "Open account"
+      end
+    end
+
+    describe "and has admin status" do
+      before :each do
+        @admin_user = FactoryBot.create(:user, :admin, username: "Admin")
+        sign_in(username: "Admin", password: "Foobar1")
+      end
+
+      it "can see in users listing, which user accounts are closed" do
+        visit users_path
+        expect(page).to have_content "Account closed"
+        expect(User.blocked.count).to eq(1)
+      end
+
+      it "can close the user account from user's page" do
+        visit user_path(@blocked_user)
+        expect(page).to have_link "Open account"
+        expect(@blocked_user.blocked).to eq(true)
+        click_link("Open account")
+        @blocked_user.reload
+        expect(@blocked_user.blocked).to eq(false)
+        expect(page).to have_link "Close account"
+        expect(User.blocked.count).to eq(0)
+      end
+
+      it "can open the closed user account from user's page" do
+        visit user_path(@user)
+        expect(page).to have_link "Close account"
+        expect(@user.blocked).to eq(false)
+        click_link("Close account")
+        @user.reload
+        expect(@user.blocked).to eq(true)
+        expect(page).to have_link "Open account"
+        expect(User.blocked.count).to eq(2)
       end
     end
   end

@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_blocked_users, only: %i[show edit update]
+  before_action :set_admin, only: %i[show edit update]
 
   # GET /users or /users.json
   def index
@@ -19,7 +21,15 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def toggle_status
+    user = User.find(params[:id])
+    user.update_attribute :blocked, !user.blocked
+
+    new_status = user.blocked? ? "closed" : "open"
+    redirect_to user, notice: "User account status changed to #{new_status}"
+  end
   # POST /users or /users.json
+
   def create
     @user = User.new(user_params)
 

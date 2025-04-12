@@ -1,10 +1,14 @@
 <div id="<%= dom_id @user %>">
   <p>
-    <h2>Username:</h2>
-    <strong>
-      <%= @user.username %>
-    </strong>
+    <h2>User:
+      <strong>
+        <%= @user.username %>
+      </strong>
+    </h2>
   </p>
+  <% if @user.blocked? && @current_user&.admin? %>
+    <span class="badge bg-primary">Account closed</span>
+  <% end %>
   <p>
     <%= @user.rating_summary %>
   </p>
@@ -43,7 +47,14 @@
 </div>
 
 <div>
-  <%= edit_and_destroy_buttons(@user) %>
+  <%= user_edit_and_destroy_buttons(@user, @current_user) %>
+  <% if @user.blocked? %>
+    <% button_text = "Open account" %>
+  <% else %>
+    <% button_text = "Close account" %>
+  <% end %>
+  <%= link_to button_text, toggle_status_user_path(@user.id),
+    data: {turbo_method: "post"}, class: "btn btn-danger" if current_user&.admin? %>
   <p></p>
   <%= link_to "Back to users", users_path %>
 </div>

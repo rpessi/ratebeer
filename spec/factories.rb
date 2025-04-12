@@ -7,6 +7,10 @@ FactoryBot.define do
     trait :admin do
       admin { true }
     end
+
+    trait :blocked do
+      blocked { true }
+    end
   end
 
   factory :brewery do
