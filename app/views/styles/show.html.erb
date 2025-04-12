@@ -1,8 +1,7 @@
 <div id="<%= dom_id @style %>">
-  <p>
-    <strong>Name:</strong>
+  <h2>
     <%= @style.name %>
-  </p>
+  </h2>
 
   <quote>
     <%= @style.description %>
@@ -17,7 +16,7 @@
     </ul>
   <% end %>
 
-  <%= edit_and_destroy_buttons(@style) %>
-  <%= link_to "Back to styles", styles_path %>
+  <%= edit_and_destroy_buttons_admin(@style) %>
+  <%= link_to "Back to styles", styles_path, class:"btn btn-primary" %>
 
 </div>

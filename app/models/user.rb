@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :beer_clubs, through: :memberships
 
+  scope :admin, -> { where(admin: true) }
+
   def rating_summary
     if ratings.count == 0
       "User has no ratings."

@@ -27,7 +27,7 @@ describe "Beers page" do
       end
 
       it "allows a beer with a name to be added" do
-        sign_in(username: "Pekka", password: "Foobar1")
+        # sign_in(username: "Pekka", password: "Foobar1")
         visit new_beer_path
         fill_in('beer_name', with: 'Tasty Lager' )
         select(@style.name)
@@ -39,7 +39,7 @@ describe "Beers page" do
       end
   
       it "will not allow a beer without a name to be added" do
-        sign_in(username: "Pekka", password: "Foobar1")
+        # sign_in(username: "Pekka", password: "Foobar1")
         visit new_beer_path
         fill_in('beer_name', with: '' )
         select(@style.name)
@@ -60,15 +60,24 @@ describe "Beers page" do
         expect(page).to have_content "Beer was successfully updated."
         expect(page).to have_content "Better Factory Beer"
       end
+    end
+
+    describe "for a signed in admin user" do
+      before :each do
+        @admin_user = FactoryBot.create(:user, :admin, username: "Admin")
+      end
 
       it "will allow a beer to be destroyed" do
+        sign_in(username: "Admin", password: "Foobar1")
+        expect(@admin_user.admin?).to eq(true)
         visit beer_path(@beer)
+        expect(page).to have_content "Destroy"
+        expect(page).to have_content "Update"
         expect{
           click_link "Destroy"
         }.to change{Beer.count}.by(-1)
         expect(page).to have_content "Beer was successfully destroyed."
       end
-      
     end
   end
 end

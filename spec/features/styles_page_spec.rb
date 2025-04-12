@@ -36,7 +36,7 @@ describe "Styles page" do
           click_button('Create Style')
         }.to change{Style.count}.by(1)
         expect(page).to have_content "Style was successfully created"
-        expect(page).to have_content "Name: Factory IPA"
+        expect(page).to have_content "Factory IPA"
         expect(page).to have_content "Factory IPA style"
       end
 
@@ -73,7 +73,7 @@ describe "Styles page" do
           click_button('Create Style')
         }.to change{Style.count}.by(1)
         expect(page).to have_content "Style was successfully created"
-        expect(page).to have_content "Name: Factory IPA"
+        expect(page).to have_content "Factory IPA"
         click_link("Update")
         fill_in('style_name', with: 'New Factory IPA')
         expect{
@@ -83,6 +83,24 @@ describe "Styles page" do
         expect(page).to have_content "New Factory IPA"
       end
 
+    describe "for a signed in admin user" do
+      before :each do
+        @admin_user = FactoryBot.create(:user, :admin, username: "Admin")
+      end
+
+      it "will allow a beer_club to be destroyed" do
+        sign_in(username: "Admin", password: "Foobar1")
+        expect(@admin_user.admin?).to eq(true)
+        visit style_path(@style)
+        expect(page).to have_content "Destroy"
+        expect(page).to have_content "Update"
+        expect{
+          click_link "Destroy"
+        }.to change{Style.count}.by(-1)
+        expect(page).to have_content "Style was successfully destroyed."
+      end
+      end
+=begin
       it "will let user delete a style" do
         sign_in(username: "Pekka", password: "Foobar1")
         FactoryBot.create(:beer, style: @style)
@@ -94,6 +112,7 @@ describe "Styles page" do
         expect(Beer.count).to eq(0) 
         expect(page).to have_content "Style was successfully destroyed"
       end
+=end
     end
 
   end

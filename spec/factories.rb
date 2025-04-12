@@ -3,6 +3,10 @@ FactoryBot.define do
     username { "Pekka" }
     password { "Foobar1" }
     password_confirmation { "Foobar1" }
+
+    trait :admin do
+      admin { true }
+    end
   end
 
   factory :brewery do

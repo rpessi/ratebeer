@@ -5,7 +5,6 @@ include Helpers
 describe "Breweries page" do
   it "should not have any before been created" do
     visit breweries_path
-    # puts page.html
     expect(page).to have_content 'Breweries'
     expect(page).to have_content 'Number of active breweries: 0'
   end
@@ -69,13 +68,20 @@ describe "Breweries page" do
         expect(page).to have_content "Updated Brewery"
       end
 
-      it "to delete a brewery" do
+      it "to change activity of a brewery" do
         sign_in(username: "Pekka", password: "Foobar1")
         visit brewery_path(@brewery)
-        expect{
-          click_link 'Destroy'
-        }.to change{Brewery.count}.by(-1)
-        expect(page).to have_content "Brewery was successfully destroyed."
+        expect(page).to have_link "Change activity"
+        click_link('Change activity')
+        @brewery.reload
+        expect(@brewery.active).to eq(false)
+        expect(page).to have_content "Brewery activity status changed to retired"
+        expect(page).to have_content "Retired"
+        click_link('Change activity')
+        @brewery.reload
+        expect(@brewery.active).to eq(true)
+        expect(page).to have_content "Brewery activity status changed to active"
+        expect(page).to_not have_content "Retired"
       end
 
       describe "to make no changes with invalid credentials" do
@@ -126,6 +132,26 @@ describe "Breweries page" do
           }.to change{Brewery.count}.by(0)
           expect(page).to have_content "Year can't be blank"
         end
+      end
+    end
+
+    describe "for a signed in admin user" do
+      before :each do
+        @admin_user = FactoryBot.create(:user, :admin, username: "Admin")
+        @brewery = FactoryBot.create :brewery
+      end
+
+      it "will allow a beer_club to be destroyed" do
+        sign_in(username: "Admin", password: "Foobar1")
+        expect(@admin_user.admin?).to eq(true)
+        visit brewery_path(@brewery)
+        expect(page).to have_content "Factory Brewery"
+        expect(page).to have_content "Destroy"
+        expect(page).to have_content "Update"
+        expect{
+          click_link "Destroy"
+        }.to change{Brewery.count}.by(-1)
+        expect(page).to have_content "Brewery was successfully destroyed."
       end
     end
   end

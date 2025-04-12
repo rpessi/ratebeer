@@ -72,14 +72,23 @@ describe "Beer clubs page" do
         expect(page).to have_content "Founded: 2000"
         expect(page).to have_content "Beer club was successfully updated."
       end
+    end
 
-      it "allows the user to delete a beer club" do
+    describe "for a signed in admin user" do
+      before :each do
+        @admin_user = FactoryBot.create(:user, :admin, username: "Admin")
+      end
+
+      it "will allow a beer_club to be destroyed" do
+        sign_in(username: "Admin", password: "Foobar1")
+        expect(@admin_user.admin?).to eq(true)
         visit beer_club_path(beer_club)
+        expect(page).to have_content "Destroy"
+        expect(page).to have_content "Update"
         expect{
-          click_link('Destroy')
+          click_link "Destroy"
         }.to change{BeerClub.count}.by(-1)
         expect(page).to have_content "Beer club was successfully destroyed."
-        expect(page).to_not have_content "Maistajat"
       end
     end
   end

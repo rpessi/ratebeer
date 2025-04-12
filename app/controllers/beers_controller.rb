@@ -2,6 +2,7 @@ class BeersController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show]
   before_action :set_beer, only: %i[show edit update destroy]
   before_action :set_breweries_and_styles_for_template, only: [:new, :edit]
+  before_action :set_admin, only: %i[show destroy]
 
   # GET /beers or /beers.json
   def index
@@ -55,6 +56,8 @@ class BeersController < ApplicationController
 
   # DELETE /beers/1 or /beers/1.json
   def destroy
+    return unless @admin
+
     @beer.destroy!
 
     respond_to do |format|

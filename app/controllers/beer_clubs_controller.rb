@@ -1,6 +1,7 @@
 class BeerClubsController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show]
   before_action :set_beer_club, only: %i[show edit update destroy]
+  before_action :set_admin, only: %i[show destroy]
   helper_method :check_membership
 
   # GET /beer_clubs or /beer_clubs.json
@@ -54,6 +55,8 @@ class BeerClubsController < ApplicationController
 
   # DELETE /beer_clubs/1 or /beer_clubs/1.json
   def destroy
+    return unless @admin
+
     @beer_club.destroy!
 
     respond_to do |format|
