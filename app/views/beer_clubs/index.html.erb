@@ -1,25 +1,23 @@
 <h1>Beer clubs</h1>
 
 <div id="beer_clubs">
-  <% @beer_clubs.each do |beer_club| %>
-    <div id="<%= dom_id beer_club %>">
-      <p>
-        <strong>Name:</strong>
-        <%= link_to beer_club.name, beer_club %>
-      </p>
-
-      <p>
-        <strong>Founded:</strong>
-        <%= beer_club.founded %>
-      </p>
-
-      <p>
-        <strong>City:</strong>
-        <%= beer_club.city %>
-      </p>
-
-    </div>
-  <% end %>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col"><%= link_to "Name", beer_clubs_path(order: "name") %></th>
+        <th scope="col"><%= link_to "Founded", beer_clubs_path(order: "founded") %></th>
+        <th scope="col"><%= link_to "City", beer_clubs_path(order: "city") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @beer_clubs.each do |beer_club| %>
+        <tr>
+          <th scope="row"><%= link_to beer_club.name, beer_club %></th>
+          <td><%= beer_club.founded %></td>
+          <td><%= beer_club.city %></td>
+        </tr>
+      <% end %>
+  </table>
 </div>
 
 <%= link_to("New beer club", new_beer_club_path, class:'btn btn-primary') if current_user %>

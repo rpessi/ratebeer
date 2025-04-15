@@ -1,13 +1,20 @@
 class BeersController < ApplicationController
-  before_action :ensure_that_signed_in, except: [:index, :show]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :set_beer, only: %i[show edit update destroy]
   before_action :set_breweries_and_styles_for_template, only: [:new, :edit]
   before_action :set_admin, only: %i[show destroy]
 
   # GET /beers or /beers.json
   def index
-    @beers = Beer.order(:brewery_id)
-    # render :index - renderöidään, vaikkei kerrota
+    @beers = Beer.all
+    order = params[:order] || 'name'
+
+    @beers = case order
+             when "name" then @beers.sort_by(&:name)
+             when "brewery" then @beers.sort_by { |b| b.brewery.name }
+             when "style" then @beers.sort_by { |b| b.style.name }
+             when "rating" then @beers.sort_by(&:average_rating).reverse
+             end
   end
 
   # GET /beers/1 or /beers/1.json
@@ -69,6 +76,9 @@ class BeersController < ApplicationController
   def set_breweries_and_styles_for_template
     @breweries = Brewery.all
     @styles = Style.all
+  end
+
+  def list
   end
 
   private

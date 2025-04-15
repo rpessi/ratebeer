@@ -23,11 +23,6 @@ Rails.application.routes.draw do
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
   post 'places', to: 'places#search'
-  # get 'ratings', to: 'ratings#index'
-  # get 'ratings/new', to: 'ratings#new'
-  # post 'ratings', to: 'ratings#create'
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-
+  get 'beerlist', to: 'beers#list'
+  get 'brewerylist', to: 'breweries#list'
 end

@@ -82,5 +82,19 @@
         </div>
       </div>
     </div>
+    <script type="module">
+      import { beers, breweries } from "custom/utils";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const beersDiv = document.getElementById("beers");
+        if (beersDiv) {
+          beers(); // Call the beers() function if #beers exists
+        }
+        const breweriesDiv = document.getElementById("breweries");
+        if (breweriesDiv) {
+          breweries();
+        }
+      });
+    </script>
   </body>
 </html>
