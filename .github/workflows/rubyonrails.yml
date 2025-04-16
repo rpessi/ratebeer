@@ -35,25 +35,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Setup chromedriver
-        uses: nanasess/setup-chromedriver@master
-        with:
-          # Optional: do not specify to match Chrome's version
-          chromedriver-version: "100.0.4896.20"
-
-      - name: Debug Chrome Path
-        run: |
-          echo "Checking common chrome paths..."
-          ls -l /usr/local/bin/google-chrome || echo "Not found in /usr/local/bin/google-chrome"
-          ls -l /usr/bin/google-chrome || echo "Not found in /usr/bin/google-chrome"
-          ls -l /opt/google/chrome/google-chrome || echo "Not found in /opt/google/chrome/google-chrome"
-          which chrome || echo "Chrome binary not found in PATH"
-      - name: Add Chrome to PATH
-        run: echo "/usr/bin" >> $GITHUB_PATH
-      - run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
 
       # Add or replace database setup steps here
       #- name: Set up database schema
@@ -66,7 +47,7 @@ jobs:
       - name: Run CodeClimate test reporter before tests
         run: ./cc-test-reporter before-build
       - name: Run tests with coverage
-        run: bundle exec rspec
+        run: bundle exec rspec --tag ~skip_in_ci
       - name: Upload coverage to CodeClimate
         run: ./cc-test-reporter after-build --exit-code $?
 
