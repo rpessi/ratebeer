@@ -27,11 +27,12 @@ describe "Beers page" do
       end
 
       it "allows a beer with a name to be added" do
-        # sign_in(username: "Pekka", password: "Foobar1")
         visit new_beer_path
         fill_in('beer_name', with: 'Tasty Lager' )
         select(@style.name)
         select(@beer.brewery.name)
+        expect_any_instance_of(BeersController).to receive(:expire_brewery_cache)
+        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         expect{
           click_button('Create Beer')
         }.to change{Beer.count}.by(1)
@@ -39,7 +40,6 @@ describe "Beers page" do
       end
   
       it "will not allow a beer without a name to be added" do
-        # sign_in(username: "Pekka", password: "Foobar1")
         visit new_beer_path
         fill_in('beer_name', with: '' )
         select(@style.name)
@@ -55,6 +55,7 @@ describe "Beers page" do
         click_link "Update"
         expect(page).to have_content "Editing beer"
         fill_in('beer[name]', with: 'Better Factory Beer' )
+        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         click_button('Update Beer')
         expect(Beer.count).to eq(1)
         expect(page).to have_content "Beer was successfully updated."
@@ -73,6 +74,8 @@ describe "Beers page" do
         visit beer_path(@beer)
         expect(page).to have_content "Destroy"
         expect(page).to have_content "Update"
+        expect_any_instance_of(BeersController).to receive(:expire_brewery_cache)
+        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         expect{
           click_link "Destroy"
         }.to change{Beer.count}.by(-1)

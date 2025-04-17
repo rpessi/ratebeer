@@ -4,16 +4,59 @@ include Helpers
 
 describe "Beer clubs page" do
   let!(:user) { FactoryBot.create :user }
-  let!(:beer_club) {FactoryBot.create :beer_club, name: "Maistajat"}
+
   it "should not have any before been created" do
     visit beer_clubs_path
     expect(page).to have_content 'Beer clubs'
+    expect(page).to_not have_content 'Maistajat'
   end
 
   describe "when beer clubs exists" do
-    it "shows the name of the beer club" do
+    let!(:beer_club) { FactoryBot.create :beer_club, name: "Maistajat" }
+    let!(:beer_club2) { FactoryBot.create :beer_club,
+                                           name: "Siemailijat",
+                                           founded: 1990,
+                                           city: "Helsinki" }
+
+    it "shows the names of the beer clubs" do
       visit beer_clubs_path
       expect(page).to have_content "Maistajat"
+      expect(page).to have_content "Siemailijat"
+    end
+
+    it "allows the clubs to be sorted by 'founded'" do
+      visit beer_clubs_path
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      expect(rows[1].text).to eq("Maistajat 2000 Turku")
+      click_link('Founded')
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      expect(rows[1].text).to eq("Siemailijat 1990 Helsinki")
+    end
+
+    it "allows the clubs to be sorted by 'city'" do
+      visit beer_clubs_path
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      expect(rows[1].text).to eq("Maistajat 2000 Turku")
+      click_on('City')
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      expect(rows[1].text).to eq("Siemailijat 1990 Helsinki")
+    end
+
+    it "allows the clubs to be sorted by 'name'" do
+      visit beer_clubs_path
+      click_on('City')
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      #if rows.size == 3
+      expect(rows[1].text).to eq("Siemailijat 1990 Helsinki")
+      click_on('Name')
+      expect(page).to have_css('table tr', minimum: 3)
+      rows = all('tr')
+      expect(rows[1].text).to eq("Maistajat 2000 Turku")
     end
 
     describe "for a signed in user" do

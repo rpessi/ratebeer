@@ -37,8 +37,9 @@ FactoryBot.define do
   end
 
   factory :beer_club do
-    name { "Factory Beer Club"}
+    name { "Factory Beer Club" }
     founded { 2000 }
+    city { "Turku" }
   end
 
   factory :membership do

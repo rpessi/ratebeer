@@ -3,13 +3,17 @@ class BeersController < ApplicationController
   before_action :set_beer, only: %i[show edit update destroy]
   before_action :set_breweries_and_styles_for_template, only: [:new, :edit]
   before_action :set_admin, only: %i[show destroy]
+  after_action :expire_brewery_cache, only: %i[create destroy]
+  after_action :expire_beer_cache, only: %i[create update destroy]
 
   # GET /beers or /beers.json
   def index
-    @beers = Beer.all
-    order = params[:order] || 'name'
+    @order = params[:order] || 'name'
+    return if request.format.html? && fragment_exist?("beerlist-#{@order}")
 
-    @beers = case order
+    @beers = Beer.includes(:brewery, :style, :ratings).all
+
+    @beers = case @order
              when "name" then @beers.sort_by(&:name)
              when "brewery" then @beers.sort_by { |b| b.brewery.name }
              when "style" then @beers.sort_by { |b| b.style.name }

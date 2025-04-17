@@ -23,6 +23,8 @@ describe "Rating" do
     select('Iso 3', from: 'rating[beer_id]')
     fill_in('rating[score]', with: '15')
 
+    expect_any_instance_of(RatingsController).to receive(:expire_brewery_cache)
+    expect_any_instance_of(RatingsController).to receive(:expire_beer_cache)
     expect{
       click_button "Create Rating"
     }.to change{Rating.count}.from(0).to(1)
@@ -110,6 +112,8 @@ describe "Rating" do
       end
     }.to change{Rating.count}.from(2).to(1)
 
+    expect_any_instance_of(RatingsController).to receive(:expire_brewery_cache)
+    expect_any_instance_of(RatingsController).to receive(:expire_beer_cache)
     expect{
       within("li", text: 'Karhu 18') do 
         click_link 'Delete'

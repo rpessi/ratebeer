@@ -39,6 +39,7 @@ describe "Brewerylist page" , :skip_in_ci do
 
   it "shows the breweries in alphabetical order", js: true do
     visit brewerylist_path
+    expect(page).to have_css('table tr', minimum: 4)
     rows = all('tr')
     expect(rows[1].text).to eq("Ayinger 1930 1 true")
     expect(rows[2].text).to eq("Koff 1897 3 true")

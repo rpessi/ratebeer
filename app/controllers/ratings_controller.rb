@@ -1,4 +1,7 @@
 class RatingsController < ApplicationController
+  after_action :expire_brewery_cache, only: %i[create destroy]
+  after_action :expire_beer_cache, only: %i[create destroy]
+
   def index
     @ratings = Rating.all
     @top_breweries = Brewery.top 3

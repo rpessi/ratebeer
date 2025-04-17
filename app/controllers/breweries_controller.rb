@@ -2,12 +2,17 @@ class BreweriesController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :set_brewery, only: %i[show edit update destroy]
   before_action :set_admin, only: %i[show destroy]
+  after_action :expire_brewery_cache, only: %i[toggle_activity create update destroy]
+  after_action :expire_beer_cache, only: %i[destroy]
 
   # GET /breweries or /breweries.json
   def index
     @breweries = Brewery.order(:name)
-    @active_breweries = Brewery.active
-    @retired_breweries = Brewery.retired
+    @active_breweries = Brewery.includes(:beers, :ratings).active
+    @retired_breweries = Brewery.includes(:beers, :ratings).retired
+    # CODE for scope, models/from brewery.rb
+    # scope :active, -> { where active: true }
+    # scope :retired, -> { where active: [nil, false] }
   end
 
   def list

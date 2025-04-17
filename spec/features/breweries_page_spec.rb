@@ -47,7 +47,7 @@ describe "Breweries page" do
         visit new_brewery_path
         fill_in('brewery_name', with: 'Old Factory Brewery')
         fill_in('brewery_year', with: '1968')
-        
+        expect_any_instance_of(BreweriesController).to receive(:expire_brewery_cache)
         expect{
           click_button('Create Brewery')
         }.to change{Brewery.count}.by(1)
@@ -61,6 +61,7 @@ describe "Breweries page" do
         visit brewery_path(@brewery)
         click_link "Update"
         fill_in('brewery_name', with: 'Updated Brewery')
+        expect_any_instance_of(BreweriesController).to receive(:expire_brewery_cache)
         expect{
           click_button('Update Brewery')
         }.to change{Brewery.count}.by(0)
@@ -77,6 +78,7 @@ describe "Breweries page" do
         expect(@brewery.active).to eq(false)
         expect(page).to have_content "Brewery activity status changed to retired"
         expect(page).to have_content "Retired"
+        expect_any_instance_of(BreweriesController).to receive(:expire_brewery_cache)
         click_link('Change activity')
         @brewery.reload
         expect(@brewery.active).to eq(true)
@@ -148,6 +150,8 @@ describe "Breweries page" do
         expect(page).to have_content "Factory Brewery"
         expect(page).to have_content "Destroy"
         expect(page).to have_content "Update"
+        expect_any_instance_of(BreweriesController).to receive(:expire_brewery_cache)
+        expect_any_instance_of(BreweriesController).to receive(:expire_beer_cache)
         expect{
           click_link "Destroy"
         }.to change{Brewery.count}.by(-1)
