@@ -2,7 +2,8 @@ require 'rails_helper'
 
 include Helpers
 
-describe "Rating" do
+describe "Rating", :with_cache do
+  include_context "with cache"
   let!(:brewery) { FactoryBot.create :brewery, name: "Koff" }
   let!(:brewery2) { FactoryBot.create :brewery, name: "Laitila" }
   let!(:brewery3) { FactoryBot.create :brewery, name: "Olvi" }
@@ -32,10 +33,34 @@ describe "Rating" do
     expect(user.ratings.count).to eq(1)
     expect(beer1.ratings.count).to eq(1)
     expect(beer1.average_rating).to eq(15.0)
+  end
 
-    @rating = FactoryBot.create(:rating, beer: beer1, user: user)
-    visit ratings_path(@rating)
-    expect(page).to have_content ""
+  it "will not accept a rating with invalid number", :with_cache do
+    visit new_rating_path
+    select('Iso 3', from: 'rating[beer_id]')
+    fill_in('rating[score]', with: '-5')
+    expect{
+      click_button "Create Rating"
+    }.to_not change{Rating.count}
+    expect(page).to have_content "Rating must be an integer in range of 1-50."
+  end
+
+  it "caches the last ratings", :with_cache do
+    expect(Rails.cache.exist?("last_ratings")).to be false
+    visit ratings_path
+    expect(Rails.cache.exist?("last_ratings")).to be true
+  end
+
+  it "caches the top breweries", :with_cache do
+    expect(Rails.cache.exist?("top_breweries")).to be false
+    visit ratings_path
+    expect(Rails.cache.exist?("top_breweries")).to be true
+  end
+
+  it "caches the top beers", :with_cache do
+    expect(Rails.cache.exist?("top_beers")).to be false
+    visit ratings_path
+    expect(Rails.cache.exist?("top_beers")).to be true
   end
 
   it "will show the latest ratings" do

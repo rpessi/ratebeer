@@ -7,7 +7,8 @@ describe "Beers page" do
   describe "with at least one brewery" do
     before :each do
       @style = FactoryBot.create :style
-      @beer = FactoryBot.create(:beer, style: @style)
+      @brewery = FactoryBot.create :brewery
+      @beer = FactoryBot.create(:beer, brewery: @brewery, style: @style)
       @user = FactoryBot.create :user
     end
 
@@ -27,6 +28,8 @@ describe "Beers page" do
       end
 
       it "allows a beer with a name to be added" do
+        visit brewery_path(@brewery)
+        initial_cache_key = @brewery.cache_key_with_version
         visit new_beer_path
         fill_in('beer_name', with: 'Tasty Lager' )
         select(@style.name)
@@ -37,6 +40,9 @@ describe "Beers page" do
           click_button('Create Beer')
         }.to change{Beer.count}.by(1)
         expect(page).to have_content "Beer was successfully created."
+        @brewery.reload
+        updated_cache_key = @brewery.cache_key_with_version
+        expect(updated_cache_key).to_not eq(initial_cache_key)
       end
   
       it "will not allow a beer without a name to be added" do

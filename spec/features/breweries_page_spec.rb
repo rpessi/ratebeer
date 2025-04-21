@@ -33,7 +33,7 @@ describe "Breweries page" do
       click_link "Koff"
       
       expect(page).to have_content "Koff"
-      expect(page).to have_content "Established in: 1897"
+      expect(page).to have_content "Established in 1897"
     end
 
     describe "it allows a signed in user" do
@@ -52,7 +52,7 @@ describe "Breweries page" do
           click_button('Create Brewery')
         }.to change{Brewery.count}.by(1)
         expect(page).to have_content "Old Factory Brewery"
-        expect(page).to have_content "Established in: 1968"
+        expect(page).to have_content "Established in 1968"
         expect(page).to have_content "Brewery was successfully created."
       end
 

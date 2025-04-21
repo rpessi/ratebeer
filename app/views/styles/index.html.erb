@@ -1,12 +1,24 @@
-<h2>List of styles</h2>
-<%= "Number of beer styles: #{@styles.count}" %>
+<h2>Styles</h2>
 
 <div id="styles">
-  <ul>
-    <% @styles.each do |style| %>
-      <li> <%= link_to style, style %> </li>
-    <% end %>
-  </ul>
+<p><%= "Number of beer styles: #{@styles.count}" %></p>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col"><%= link_to "Name", styles_path(order: "name") %></th>
+        <th scope="col"><%= link_to "Beers", styles_path(order: "beers") %></th>
+        <th scope="col"><%= link_to "Rating", styles_path(order: "rating") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @styles.each do |style| %>
+      <tr>
+        <th scope="row"><%= link_to style.name, style %></th>
+        <td><%= style.beers.count %></td>
+        <td><%= round(style.average_rating) %></td>
+      </tr> 
+      <% end %>
+  </table>
 </div>
 
 <%= link_to("Create new style", new_style_path(@style), class:'btn btn-primary') if current_user %>

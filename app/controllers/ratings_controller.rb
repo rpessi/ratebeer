@@ -3,18 +3,32 @@ class RatingsController < ApplicationController
   after_action :expire_beer_cache, only: %i[create destroy]
 
   def index
-    @ratings = Rating.all
-    @top_breweries = Brewery.top 3
-    @top_beers = Beer.top 3
-    @top_styles = Style.top 3
-    @top_raters = Rating.top 3
-    @last_ratings = Rating.last 5
-    # render :index - renderöidään oletusarvona
+    # simple caching, taking into consideration the the speed
+    # of change and speed of query Beer.top 3 is likely to change
+    # faster than Brewery top 3. Rating.last 5 is a single and
+    # fast query, no need for longer cache duration.
+    @last_ratings = Rails.cache.fetch("last_ratings", expires_in: 10.minutes) {
+      @last_ratings = Rating.last 5
+    }
+    @top_breweries = Rails.cache.fetch("top_breweries", expires_in: 20.minutes) {
+      @top_breweries = Brewery.top 3
+    }
+    @top_beers = Rails.cache.fetch("top_beers", expires_in: 10.minutes) {
+      @top_beers = Beer.top 3
+    }
+    @top_styles = Rails.cache.fetch("top_styles", expires_in: 20.minutes) {
+      @top_styles = Style.top 3
+    }
+    @top_raters = Rails.cache.fetch("top_raters", expires_in: 10.minutes) {
+      @top_raters = Rating.top 3
+    }
   end
 
   def new
     @rating = Rating.new
-    @beers = Beer.all
+    @beers = Rails.cache.fetch("beers for rating", expires_in: 10.minutes) {
+      @beers = Beer.all
+    }
   end
 
   def create
@@ -24,8 +38,7 @@ class RatingsController < ApplicationController
     if @rating.save
       redirect_to user_path current_user
     else
-      @beers = Beer.all
-      render :new, status: :unprocessable_entity
+      redirect_to new_rating_path, notice: "Rating must be an integer in range of 1-50."
     end
   end
 

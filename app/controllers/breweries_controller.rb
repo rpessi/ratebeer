@@ -10,9 +10,6 @@ class BreweriesController < ApplicationController
     @breweries = Brewery.order(:name)
     @active_breweries = Brewery.includes(:beers, :ratings).active
     @retired_breweries = Brewery.includes(:beers, :ratings).retired
-    # CODE for scope, models/from brewery.rb
-    # scope :active, -> { where active: true }
-    # scope :retired, -> { where active: [nil, false] }
   end
 
   def list

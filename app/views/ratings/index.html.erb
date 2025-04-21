@@ -45,7 +45,6 @@
 <div id="last_ratings">
   <ul>
     <% @last_ratings.each do |rating| %>
-      <% user = rating.user %>
       <li> <%= rating.to_s %> </li>
     <% end %>
   </ul>

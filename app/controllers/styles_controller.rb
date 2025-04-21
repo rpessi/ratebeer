@@ -4,7 +4,14 @@ class StylesController < ApplicationController
   before_action :set_admin, only: %i[show destroy]
 
   def index
-    @styles = Style.all
+    @order = params[:order] || 'name'
+    @styles = Style.includes(:beers, :ratings)
+
+    @styles = case @order
+              when "name" then @styles.sort_by(&:name)
+              when "beers" then @styles.sort_by { |s| s.beers.count }.reverse
+              when "rating" then @styles.sort_by(&:average_rating).reverse
+              end
   end
 
   def show
@@ -25,7 +32,7 @@ class StylesController < ApplicationController
         format.html { redirect_to @style, notice: "Style was successfully created" }
         format.json { render :show, status: :created, location: @style }
       else
-        @styles = Style.all
+        @styles = Style.includes(:beers, :ratings)
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @style.errors, status: unprocessable_entity }
       end

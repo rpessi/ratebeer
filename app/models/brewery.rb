@@ -1,5 +1,6 @@
 class Brewery < ApplicationRecord
   include RatingAverage
+  extend TopRated
 
   validate :year_cannot_be_in_the_future_or_nil
   validates :name, presence: true
@@ -13,7 +14,6 @@ class Brewery < ApplicationRecord
   scope :retired, -> { where active: [nil, false] }
 
   def year_cannot_be_in_the_future_or_nil
-    # binding.pry
     if year.nil?
       errors.add(:year, "can't be blank")
     elsif year > Time.now.year
@@ -35,10 +35,5 @@ class Brewery < ApplicationRecord
   def restart
     self.year = 2022
     puts "Changed year to #{year}"
-  end
-
-  def self.top(number)
-    sorted = Brewery.all.sort_by(&:average_rating).reverse
-    sorted[..number - 1]
   end
 end
