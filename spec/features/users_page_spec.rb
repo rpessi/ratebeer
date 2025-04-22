@@ -94,6 +94,30 @@ describe "User" do
         expect(page).to have_content "Favorite brewery"
         expect(page).to have_content @user.favorite_brewery
       end
+
+      it "shows confirmed memberships of beer clubs" do
+        membership = FactoryBot.create(:membership, user: @user, confirmed: true)
+        visit user_path(@user)
+
+        expect(@user.memberships.count).to eq(1)
+        expect(@user.memberships.confirmed.count).to eq(1)
+        expect(page).to have_content "Member of"
+        expect(page).to_not have_content "Applied member of"
+        expect(find('[data-testid="confirmed-member"]')).to have_text("#{membership.beer_club.name}")
+        expect(page).to have_content "#{membership.beer_club.name}"
+      end
+
+      it "shows applied memberships of beer clubs" do
+        membership = FactoryBot.create(:membership, user: @user)
+        visit user_path(@user)
+
+        expect(@user.memberships.count).to eq(1)
+        expect(@user.memberships.pending.count).to eq(1)
+        expect(page).to have_content "Applied member of"
+        expect(page).to_not have_content "Member of"
+        expect(find('[data-testid="pending-member"]')).to have_text("#{membership.beer_club.name}")
+        expect(page).to have_content "#{membership.beer_club.name}"
+      end
     end
 
     describe "but has no admin status" do 

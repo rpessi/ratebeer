@@ -4,6 +4,8 @@ class MembershipsController < ApplicationController
   # GET /memberships or /memberships.json
   def index
     @memberships = Membership.all
+    @confirmed_memberships = Membership.includes(:beer_club, :user).confirmed
+    @pending_memberships = Membership.includes(:beer_club, :user).pending
   end
 
   # GET /memberships/1 or /memberships/1.json
@@ -31,7 +33,7 @@ class MembershipsController < ApplicationController
       if @membership.save
         @member = User.find(@membership.user_id).username
         @beer_club = BeerClub.find(@membership.beer_club_id)
-        format.html { redirect_to @beer_club, notice: "Welcome to the club, #{@member}." }
+        format.html { redirect_to @beer_club, notice: "Your membership is waiting for confirmation." }
       else
         @membership = Membership.find_by(membership_params)
         @beer_club = BeerClub.find(@membership.beer_club_id)
@@ -52,6 +54,14 @@ class MembershipsController < ApplicationController
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def toggle_membership
+    membership = Membership.find(params[:id])
+    @beer_club = membership.beer_club
+    @member = membership.user.username
+    membership.update_attribute :confirmed, true
+    redirect_to beer_club_path(@beer_club), notice: "Membership of #{@member} was confirmed."
   end
 
   # DELETE /memberships/1 or /memberships/1.json

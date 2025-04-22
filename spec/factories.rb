@@ -45,5 +45,9 @@ FactoryBot.define do
   factory :membership do
     user
     beer_club
+
+    trait :confirmed do
+      confirmed { nil }
+    end
   end
 end

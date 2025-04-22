@@ -1,9 +1,7 @@
 <div id="<%= dom_id @user %>">
   <p>
-    <h2>User:
-      <strong>
+    <h2>Userpage of
         <%= @user.username %>
-      </strong>
     </h2>
   </p>
   <% if @user.blocked? && @current_user&.admin? %>
@@ -19,28 +17,45 @@
     <%= "Favorite brewery: #{@user.favorite_brewery}" unless @user.ratings.empty? %>
   </p>
 
-  <% if not @user.ratings.empty? %>
+  <% unless @user.ratings.empty? %>
     <h3>Ratings</h3>
     <ul>
       <% @user.ratings.each do |rating| %>
         <li> <%= rating.to_s %> 
           <% if @user == current_user %>
             <%= link_to 'Delete', rating, data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
-          <%end%> 
+          <% end %> 
         </li>
       <% end %>
     </ul>
   <% end %>
 
-  <% if not @user.beer_clubs.empty? %>
-    <h3>Member of</h3>
-    <ul>
-      <% @user.beer_clubs.each do |club| %>
-        <li>
-          <%= link_to club.name, club %>
-        </li>
-      <% end %>
-    </ul>
+  <% unless @user.beer_clubs.empty? %>
+    <h3>Beer clubs<h3>
+    <% unless @user.memberships.confirmed.empty?%>
+      <h4>Member of</h4>
+      <div data-testid="confirmed-member">
+        <ul>
+          <% @user.memberships.confirmed.each do |m| %>
+            <li>
+              <%= link_to m.beer_club.name, m.beer_club %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <% unless @user.memberships.pending.empty?%>
+      <h4>Applied member of</h4>
+      <div data-testid="pending-member">
+        <ul>
+          <% @user.memberships.pending.each do |m| %>
+            <li>
+              <%= link_to m.beer_club.name, m.beer_club %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   <% else %>
     <p>User has no memberships in beer clubs. </p>
   <% end %>

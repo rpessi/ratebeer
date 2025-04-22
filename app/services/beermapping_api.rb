@@ -14,12 +14,20 @@ class BeermappingApi
       return [] if places.is_a?(Hash) && places['id'].nil?
 
       places = [places] if places.is_a?(Hash)
-      places.map do |place|
-        Place.new(place)
-      end
-    rescue HTTParty::Error => e
-      Rails.logger.error "HTTParty error: #{e.message}"
-      []
+      trim_data(places)
+      # places.map do |place|
+      #  Place.new(place)
+      # end
+    rescue ActionDispatch::Cookies::CookieOverflow
+      puts "CookieOverflow error"
+      { error: "Too many places, try a smaller city." }
+    end
+  end
+
+  def self.trim_data(places)
+    places.map do |place|
+      Place.new(id: place["id"], name: place["name"], status: place["status"],
+                city: place["city"], street: place["street"], zip: place["zip"])
     end
   end
 end

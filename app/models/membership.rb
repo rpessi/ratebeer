@@ -8,6 +8,9 @@ class Membership < ApplicationRecord
     "#{user.username}: #{beer_club.name}"
   end
 
+  scope :confirmed, -> { where confirmed: true }
+  scope :pending, -> { where confirmed: [nil, false] }
+
   private
 
   def membership_must_not_exist

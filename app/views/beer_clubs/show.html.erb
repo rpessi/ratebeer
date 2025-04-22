@@ -2,7 +2,7 @@
 
 <div>
   <% if current_user %>
-    <% if check_membership(@beer_club) %>
+    <% if confirmed_member(@beer_club) %>
       <% membership = current_user.memberships.find_by(beer_club_id: @beer_club.id)%>
       <%= form_with(model: @membership, url: membership_path(membership), method: :delete) do |form| %>
         <%= form.hidden_field :beer_club_id, value: @beer_club.id %>
@@ -10,12 +10,13 @@
         <%= form.submit("End the membership", class:'btn btn-danger btn-sm') %>
       <% end %>
     <% else %>
-      <h4>Join this beer club:</h4>
-
-      <%= form_with(model: @membership) do |form| %>
-        <%= form.hidden_field :beer_club_id, value: @beer_club.id %>
-        <%= form.hidden_field :user_id, value: current_user.id %>
-        <%= form.submit "Join the beer club" %>
+      <% unless pending_member(@beer_club)%>
+        <h4>Join this beer club:</h4>
+        <%= form_with(model: @membership) do |form| %>
+          <%= form.hidden_field :beer_club_id, value: @beer_club.id %>
+          <%= form.hidden_field :user_id, value: current_user.id %>
+          <%= form.submit "Join the beer club" %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

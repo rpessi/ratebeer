@@ -14,14 +14,30 @@
   </p>
 
     <p>
-    <% if not beer_club.members.empty? %>
-      <strong>Members:</strong>
-      </p>
-      <% beer_club.members.each do |member| %>
-      <p>
-        <%= link_to member.username, member %>
-      </p>
-      <% end %>
+    <% unless beer_club.members.empty? %>
+      <div data-testid="confirmed-member">
+        <% unless @confirmed_memberships.empty? %>
+          <strong>Members:</strong>
+          </p>
+          <% beer_club.memberships.confirmed&.each do |m| %>
+          <p>
+            <%= link_to m.user.username, m.user %>
+          </p>
+          <% end %>
+        <% end %>
+      </div>
+      <div data-testid="pending-member">
+        <% unless @pending_memberships.empty? %>
+          <strong>Membership applications:</strong>
+            <% beer_club.memberships.pending&.each do |m| %>
+          <p></p>
+            <%= link_to m.user.username, m.user %>
+            <%= link_to "Confirm", toggle_membership_membership_path(m.id),
+                data: {turbo_method: "post"}, class: "btn btn-outline-primary btn-sm" if confirmed_member(@beer_club) %>
+          <p></p>
+          <% end %>
+        <% end %>
+      </div>
     <% else %>
       <p> This beer club has no members. </p>
     <% end %>

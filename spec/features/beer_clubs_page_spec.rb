@@ -65,7 +65,9 @@ describe "Beer clubs page" do
       end
 
       it "who is a member, it lets the user to end the membership" do
-        Membership.create(beer_club_id: beer_club.id, user_id: user.id)
+        Membership.create(beer_club_id: beer_club.id,
+                          user_id: user.id,
+                          confirmed: true)
         expect(user.memberships.count).to eq(1)
 
         visit beer_club_path(beer_club)
@@ -77,15 +79,17 @@ describe "Beer clubs page" do
         expect(user.memberships.count).to eq(0)
       end
 
-      it "who is not a member, it lets the user to create a membership" do
+      it "who is not a member, it lets the user to apply for a membership" do
         expect(user.memberships.count).to eq(0)
         visit beer_club_path(beer_club)
         expect(page).to_not have_content "Members"
         expect(page).to have_button "Join the beer club"
 
         click_button "Join the beer club"
-        expect(page).to have_content "Welcome to the club, Pekka."
+        expect(page).to have_content "Your membership is waiting for confirmation."
         expect(user.memberships.count).to eq(1)
+        expect(user.memberships.last.confirmed).to eq(nil)
+        expect(find('[data-testid="pending-member"]')).to have_text("#{user.username}")
       end
 
       it "it allows the user to create a new beer club with valid credentials" do
@@ -99,7 +103,21 @@ describe "Beer clubs page" do
         }.to change{BeerClub.count}.by(1)
         expect(page).to have_content "New Factory Beerclub"
         expect(page).to have_content "Founded: 1968"
-        expect(page).to have_content "Beer club was successfully created."
+        expect(page).to have_content "Beer club was successfully created, you are the first member."
+      end
+
+      it "will create a membership for the user who created the club" do
+        visit new_beer_club_path
+        fill_in('beer_club_name', with: 'New Factory Beerclub')
+        fill_in('beer_club_founded', with: 1968)
+        fill_in('beer_club_city', with: 'Helsinki')
+
+        expect{
+          click_button('Create Beer club')
+        }.to change{user.memberships.count}.by(1)
+        expect(user.memberships.last.confirmed).to eq(true)
+        expect(user.memberships.last.beer_club.name).to eq('New Factory Beerclub')
+        expect(find('[data-testid="confirmed-member"]')).to have_text("#{user.username}")
       end
 
       it "allows the user to edit a beer club" do
@@ -114,6 +132,31 @@ describe "Beer clubs page" do
         expect(page).to have_content "Wanhat Maistajat"
         expect(page).to have_content "Founded: 2000"
         expect(page).to have_content "Beer club was successfully updated."
+      end
+
+      describe "for a confirmed member of a beer club" do
+        let!(:membership1) { FactoryBot.create :membership,
+                                                beer_club_id: beer_club.id,
+                                                user_id: user.id,
+                                                confirmed: true }
+        let!(:user2) { FactoryBot.create :user, username: "Eemeli"}
+        let!(:membership2) { FactoryBot.create :membership,
+                                                beer_club_id: beer_club.id,
+                                                user_id: user2.id}
+
+        it "allows comfirmed members to accept new members" do
+          visit beer_club_path(beer_club)
+          expect(page).to have_content "Membership applications:"
+          expect(find('[data-testid="pending-member"]')).to have_text("#{user2.username}")
+          expect(find('[data-testid="pending-member"]')).to have_link "Confirm"
+          expect(membership2.confirmed).to eq(nil)
+          click_link('Confirm')
+          membership2.reload
+          expect(membership2.confirmed).to eq(true)
+          expect(page).to have_content "Membership of #{user2.username} was confirmed."
+          expect(find('[data-testid="confirmed-member"]')).to have_text("#{user2.username}")
+          expect(page).to_not have_content "Membership applications:"
+        end
       end
     end
 

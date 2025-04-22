@@ -31,7 +31,7 @@ describe "Memberships page" do
       expect{
         click_button "Create Membership"
       }.to change{Membership.count}.from(1).to(2)
-      expect(page).to have_content "Welcome to the club, #{user.username}."
+      expect(page).to have_content "Your membership is waiting for confirmation."
       expect(page).to have_content "Factory Beer Club"
     end
 

@@ -2,7 +2,7 @@ class BeerClubsController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show]
   before_action :set_beer_club, only: %i[show edit update destroy]
   before_action :set_admin, only: %i[show destroy]
-  helper_method :check_membership
+  helper_method :confirmed_member, :pending_member
 
   # GET /beer_clubs or /beer_clubs.json
   def index
@@ -18,6 +18,8 @@ class BeerClubsController < ApplicationController
 
   # GET /beer_clubs/1 or /beer_clubs/1.json
   def show
+    @confirmed_memberships = @beer_club.memberships&.confirmed
+    @pending_memberships = @beer_club.memberships&.pending
     @membership = Membership.new
     @membership.beer_club = @beer_club
   end
@@ -37,7 +39,8 @@ class BeerClubsController < ApplicationController
 
     respond_to do |format|
       if @beer_club.save
-        format.html { redirect_to @beer_club, notice: "Beer club was successfully created." }
+        Membership.create(beer_club: @beer_club, user: current_user, confirmed: true)
+        format.html { redirect_to @beer_club, notice: "Beer club was successfully created, you are the first member." }
         format.json { render :show, status: :created, location: @beer_club }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -83,7 +86,15 @@ class BeerClubsController < ApplicationController
     params.require(:beer_club).permit(:name, :founded, :city)
   end
 
-  def check_membership(beer_club)
-    current_user.memberships.exists?(beer_club_id: beer_club.id)
+  def confirmed_member(beer_club)
+    current_user.memberships.exists?(beer_club_id: beer_club.id, confirmed: true)
   end
+
+  def pending_member(beer_club)
+    current_user.memberships.exists?(beer_club_id: beer_club.id, confirmed: [nil, false])
+  end
+
+  # def check_membership(beer_club)
+  #  current_user.memberships.exists?(beer_club_id: beer_club.id)
+  # end
 end
