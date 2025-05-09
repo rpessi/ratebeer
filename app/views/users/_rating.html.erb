@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "rating" do %>
+  <h4><%= @rating.beer.name %></h4>
+  <p><%= "Style #{@rating.beer.style}"%></p>
+  <p><%= "Brewed by #{@rating.beer.brewery.name}"%></p>
+  <p><%= "Rated #{@rating.rated}"%></p>
+<% end %>

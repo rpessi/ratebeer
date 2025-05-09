@@ -2,8 +2,7 @@ require 'rails_helper'
 
 include Helpers
 
-describe "Rating", :with_cache do
-  include_context "with cache"
+describe "Rating" do
   let!(:brewery) { FactoryBot.create :brewery, name: "Koff" }
   let!(:brewery2) { FactoryBot.create :brewery, name: "Laitila" }
   let!(:brewery3) { FactoryBot.create :brewery, name: "Olvi" }
@@ -24,8 +23,6 @@ describe "Rating", :with_cache do
     select('Iso 3', from: 'rating[beer_id]')
     fill_in('rating[score]', with: '15')
 
-    expect_any_instance_of(RatingsController).to receive(:expire_brewery_cache)
-    expect_any_instance_of(RatingsController).to receive(:expire_beer_cache)
     expect{
       click_button "Create Rating"
     }.to change{Rating.count}.from(0).to(1)
@@ -35,7 +32,7 @@ describe "Rating", :with_cache do
     expect(beer1.average_rating).to eq(15.0)
   end
 
-  it "will not accept a rating with invalid number", :with_cache do
+  it "will not accept a rating with invalid number" do
     visit new_rating_path
     select('Iso 3', from: 'rating[beer_id]')
     fill_in('rating[score]', with: '-5')
@@ -45,31 +42,13 @@ describe "Rating", :with_cache do
     expect(page).to have_content "Rating must be an integer in range of 1-50."
   end
 
-  it "caches the last ratings", :with_cache do
-    expect(Rails.cache.exist?("last_ratings")).to be false
-    visit ratings_path
-    expect(Rails.cache.exist?("last_ratings")).to be true
-  end
-
-  it "caches the top breweries", :with_cache do
-    expect(Rails.cache.exist?("top_breweries")).to be false
-    visit ratings_path
-    expect(Rails.cache.exist?("top_breweries")).to be true
-  end
-
-  it "caches the top beers", :with_cache do
-    expect(Rails.cache.exist?("top_beers")).to be false
-    visit ratings_path
-    expect(Rails.cache.exist?("top_beers")).to be true
-  end
-
   it "will show the latest ratings" do
     create_beers_with_many_ratings({user: user}, 10, 20, 15, 7, 9)
     visit ratings_path
 
-    expect(page).to have_content "Factory Beer 9"
-    expect(page).to have_content "Factory Beer 15"
-    expect(page).to have_content "Factory Beer 10"
+    expect(page).to have_content "Factory Beer got 9 points from Pekka"
+    expect(page).to have_content "Factory Beer got 15 points from Pekka"
+    expect(page).to have_content "Factory Beer got 10 points from Pekka"
   end
 
   it "will show three best rated beers" do
@@ -80,7 +59,7 @@ describe "Rating", :with_cache do
     expect(page).to have_content "Factory Beer"
     expect(page).to have_content "20.0"
     expect(page).to have_content "10.0"
-    expect(page).to_not have_content "9.0"
+    expect(page).to_not have_content "9.0 "
   end
 
   it "will show three best rated breweries" do
@@ -137,8 +116,6 @@ describe "Rating", :with_cache do
       end
     }.to change{Rating.count}.from(2).to(1)
 
-    expect_any_instance_of(RatingsController).to receive(:expire_brewery_cache)
-    expect_any_instance_of(RatingsController).to receive(:expire_beer_cache)
     expect{
       within("li", text: 'Karhu 18') do 
         click_link 'Delete'

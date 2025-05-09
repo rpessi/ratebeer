@@ -3,22 +3,34 @@ class BeersController < ApplicationController
   before_action :set_beer, only: %i[show edit update destroy]
   before_action :set_breweries_and_styles_for_template, only: [:new, :edit]
   before_action :set_admin, only: %i[show destroy]
-  after_action :expire_brewery_cache, only: %i[create destroy]
-  after_action :expire_beer_cache, only: %i[create update destroy]
+
+  PAGE_SIZE = 20
 
   # GET /beers or /beers.json
   def index
     @order = params[:order] || 'name'
-    return if request.format.html? && fragment_exist?("beerlist-#{@order}")
-
-    @beers = Beer.includes(:brewery, :style, :ratings).all
+    @page = params[:page]&.to_i || 1
+    @last_page = (Beer.count / PAGE_SIZE.to_f).ceil
+    offset = (@page - 1) * PAGE_SIZE
 
     @beers = case @order
-             when "name" then @beers.sort_by(&:name)
-             when "brewery" then @beers.sort_by { |b| b.brewery.name }
-             when "style" then @beers.sort_by { |b| b.style.name }
-             when "rating" then @beers.sort_by(&:average_rating).reverse
+             when "name"    then Beer.order(:name)
+                                     .limit(PAGE_SIZE).offset(offset)
+             when "brewery" then Beer.joins(:brewery)
+                                     .order("breweries.name").limit(PAGE_SIZE).offset(offset)
+             when "style"   then Beer.joins(:style)
+                                     .order("styles.name").limit(PAGE_SIZE).offset(offset)
+             when "rating" then Beer.left_joins(:ratings)
+                                    .select("beers.*, avg(ratings.score)").group("beers.id")
+                                    .order("avg(ratings.score) DESC").limit(PAGE_SIZE).offset(offset)
              end
+
+    if turbo_frame_request?
+      render partial: "beer_list",
+             locals: { beers: @beers, page: @page, order: @order, last_page: @last_page }
+    else
+      render :index
+    end
   end
 
   # GET /beers/1 or /beers/1.json

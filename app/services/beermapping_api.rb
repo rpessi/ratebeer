@@ -2,7 +2,7 @@ class BeermappingApi
   def self.places_in(city)
     city = city.downcase
 
-    Rails.cache.fetch(city, expires_in: 1.hour) { get_places_in(city) }
+    get_places_in(city)
   end
 
   def self.get_places_in(city)
@@ -15,9 +15,6 @@ class BeermappingApi
 
       places = [places] if places.is_a?(Hash)
       trim_data(places)
-      # places.map do |place|
-      #  Place.new(place)
-      # end
     rescue ActionDispatch::Cookies::CookieOverflow
       puts "CookieOverflow error"
       { error: "Too many places, try a smaller city." }

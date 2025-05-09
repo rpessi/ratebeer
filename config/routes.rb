@@ -5,15 +5,23 @@ Rails.application.routes.draw do
   resources :beer_clubs
   resources :users do
     post 'toggle_status', on: :member
+    get 'recommendation', on: :member
   end
   root 'breweries#index'
   resources :beers
-  resources :styles
+  resources :styles do
+    get 'about', on: :collection
+  end
   resources :breweries do
     post 'toggle_activity', on: :member
+    get 'active', on: :collection
+    get 'retired', on: :collection
+  end
+  resources :ratings do
+    post 'toggle_arrow', on: :collection
   end
   resources :ratings, only: [:index, :new, :create, :destroy]
-  resources :places, only: [:index, :show]
+  resources :places, only: [:index]
   resource :session, only: [:new, :create, :destroy]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # get 'test_sentry', to: 'application#test_sentry'

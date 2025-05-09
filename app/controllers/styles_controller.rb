@@ -14,7 +14,14 @@ class StylesController < ApplicationController
               end
   end
 
+  def about
+    render partial: 'about'
+  end
+
   def show
+    return unless turbo_frame_request?
+
+    render partial: 'details', locals: { style: @style }
   end
 
   def new

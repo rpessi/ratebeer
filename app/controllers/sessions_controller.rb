@@ -6,7 +6,6 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by username: params[:username]
-    # binding.pry
     # @admin = user&.admin?
     # haetaan user ja tarkistetaan salasana
     # use safe navigation operator to check if nil before calling authenticate

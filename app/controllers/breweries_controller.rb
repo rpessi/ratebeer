@@ -2,8 +2,6 @@ class BreweriesController < ApplicationController
   before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :set_brewery, only: %i[show edit update destroy]
   before_action :set_admin, only: %i[show destroy]
-  after_action :expire_brewery_cache, only: %i[toggle_activity create update destroy]
-  after_action :expire_beer_cache, only: %i[destroy]
 
   # GET /breweries or /breweries.json
   def index
@@ -13,6 +11,18 @@ class BreweriesController < ApplicationController
   end
 
   def list
+  end
+
+  def active
+    active_breweries = Brewery.includes(:beers, :ratings).active
+    render partial: 'brewery_list',
+           locals: { breweries: active_breweries, tag_name: "active_breweries_frame" }
+  end
+
+  def retired
+    retired_breweries = Brewery.includes(:beers, :ratings).retired
+    render partial: 'brewery_list',
+           locals: { breweries: retired_breweries, tag_name: "retired_breweries_frame" }
   end
 
   # GET /breweries/1 or /breweries/1.json

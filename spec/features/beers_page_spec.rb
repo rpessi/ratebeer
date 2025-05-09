@@ -29,20 +29,14 @@ describe "Beers page" do
 
       it "allows a beer with a name to be added" do
         visit brewery_path(@brewery)
-        initial_cache_key = @brewery.cache_key_with_version
         visit new_beer_path
         fill_in('beer_name', with: 'Tasty Lager' )
         select(@style.name)
         select(@beer.brewery.name)
-        expect_any_instance_of(BeersController).to receive(:expire_brewery_cache)
-        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         expect{
           click_button('Create Beer')
         }.to change{Beer.count}.by(1)
         expect(page).to have_content "Beer was successfully created."
-        @brewery.reload
-        updated_cache_key = @brewery.cache_key_with_version
-        expect(updated_cache_key).to_not eq(initial_cache_key)
       end
   
       it "will not allow a beer without a name to be added" do
@@ -61,7 +55,6 @@ describe "Beers page" do
         click_link "Update"
         expect(page).to have_content "Editing beer"
         fill_in('beer[name]', with: 'Better Factory Beer' )
-        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         click_button('Update Beer')
         expect(Beer.count).to eq(1)
         expect(page).to have_content "Beer was successfully updated."
@@ -80,8 +73,6 @@ describe "Beers page" do
         visit beer_path(@beer)
         expect(page).to have_content "Destroy"
         expect(page).to have_content "Update"
-        expect_any_instance_of(BeersController).to receive(:expire_brewery_cache)
-        expect_any_instance_of(BeersController).to receive(:expire_beer_cache)
         expect{
           click_link "Destroy"
         }.to change{Beer.count}.by(-1)

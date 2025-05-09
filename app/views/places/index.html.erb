@@ -12,14 +12,18 @@
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Status</th>
+          <th scope="col">Street</th>
           <th scope="col">Zip</th>
+          <th scope="col">City</th>
         </tr>
       </thead>
       <% @places.each do |place| %>
         <tr>
-          <th scope="row"><%= link_to place.name,  place_path(place.id)%></th>
+          <th scope="row"><%= place.name %></th>
           <td><%= place.status %></td>
+          <td><%= place.street %></td>
           <td><%= place.zip %></td>
+          <td><%= place.city %></td>
         </tr>
       <% end %>
     </table>

@@ -12,12 +12,16 @@ class Rating < ApplicationRecord
     "#{beer.name} #{score}"
   end
 
+  def summary
+    "#{beer.name} got #{score} points from #{user.username} on #{updated_at.to_date.strftime('%d.%m.%Y')} at #{updated_at.strftime('%H:%M:%S')}"
+  end
+
+  def rated
+    updated_at.to_date.strftime('%d.%m.%Y')
+  end
+
   # users with most ratings, @top_raters
   def self.top(number)
     User.all.sort_by { |user| user.ratings.count }.reverse[..number - 1]
-  end
-
-  def self.last(number)
-    Rating.all.sort_by(&:updated_at).reverse[..number - 1]
   end
 end

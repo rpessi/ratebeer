@@ -18,14 +18,4 @@ class ApplicationController < ActionController::Base
   def set_blocked_users
     @blocked_users = User.blocked
   end
-
-  private
-
-  def expire_brewery_cache
-    ["brewerylist-active", "brewerylist-retired"].each{ |f| expire_fragment(f) }
-  end
-
-  def expire_beer_cache
-    %w(beerlist-name beerlist-brewery beerlist-style).each{ |f| expire_fragment(f) }
-  end
 end

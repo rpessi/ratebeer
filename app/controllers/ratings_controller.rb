@@ -1,34 +1,44 @@
 class RatingsController < ApplicationController
-  after_action :expire_brewery_cache, only: %i[create destroy]
-  after_action :expire_beer_cache, only: %i[create destroy]
+  PAGE_SIZE = 5
 
   def index
-    # simple caching, taking into consideration the the speed
-    # of change and speed of query Beer.top 3 is likely to change
-    # faster than Brewery top 3. Rating.last 5 is a single and
-    # fast query, no need for longer cache duration.
-    @last_ratings = Rails.cache.fetch("last_ratings", expires_in: 10.minutes) {
-      @last_ratings = Rating.last 5
-    }
-    @top_breweries = Rails.cache.fetch("top_breweries", expires_in: 20.minutes) {
-      @top_breweries = Brewery.top 3
-    }
-    @top_beers = Rails.cache.fetch("top_beers", expires_in: 10.minutes) {
-      @top_beers = Beer.top 3
-    }
-    @top_styles = Rails.cache.fetch("top_styles", expires_in: 20.minutes) {
-      @top_styles = Style.top 3
-    }
-    @top_raters = Rails.cache.fetch("top_raters", expires_in: 10.minutes) {
-      @top_raters = Rating.top 3
-    }
+    @top_breweries = Brewery.top 3
+    @top_beers = Beer.top 3
+    @top_styles = Style.top 3
+    @top_raters = Rating.top 3
+    @order = params[:order] || "up" # latest first
+    @page = params[:page]&.to_i || 1
+    @last_page = (Rating.count / PAGE_SIZE.to_f).ceil
+    offset = (@page - 1) * PAGE_SIZE
+
+    @ratings = case @order
+               when "down" then Rating.order(:updated_at)
+                                      .limit(PAGE_SIZE).offset(offset)
+               when "up" then Rating.order(updated_at: :desc)
+                                    .limit(PAGE_SIZE).offset(offset)
+               end
   end
+
+  def toggle_arrow
+    @current_order = params[:order]
+    @page = params[:page]
+    @order = @current_order == "up" ? "down" : "up"
+
+    redirect_to ratings_path(page: @page, order: @order)
+  end
+
+  # CODE FROM routes.rb
+  #   resources :ratings do
+  #     post 'toggle_arrow', on: :collection
+  #   end
+  #   resources :ratings, only: [:index, :new, :create, :destroy]
+  # CODE FROM index.html.erb
+  # <%= link_to "&uarr", toggle_arrow_ratings_path(page: @page, order: @order) unless @order == "up" %>
+  # <%= link_to "&darr", toggle_arrow_ratings_path(page: @page, order: @order) unless @order == "down" %>
 
   def new
     @rating = Rating.new
-    @beers = Rails.cache.fetch("beers for rating", expires_in: 10.minutes) {
-      @beers = Beer.all
-    }
+    @beers = Beer.all
   end
 
   def create

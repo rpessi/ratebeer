@@ -40,14 +40,25 @@
   </ol>
 </div>
 
-<h4>Recent ratings</h4>
+<h4>Ratings</h4>
 
-<div id="last_ratings">
+<div id="ratings">
+  <%= link_to "&darr;".html_safe, toggle_arrow_ratings_path(page: @page, order: @order),
+    data: {turbo_method: "post"} unless @order == "up" %> 
+  <%= link_to "&uarr;".html_safe, toggle_arrow_ratings_path(page: @page, order: @order),
+    data: {turbo_method: "post"} unless @order == "down" %>
+  <% unless @page == 1 %>
+    <%= link_to "<<< Previous page", ratings_path(page: @page - 1, order: @order) %>
+  <% end %>
+  <% unless @page == @last_page %>
+    <%= link_to "Next page >>>", ratings_path(page: @page + 1, order: @order) %>
+  <% end %>
   <ul>
-    <% @last_ratings.each do |rating| %>
-      <li> <%= rating.to_s %> </li>
+    <% @ratings.each do |rating| %>
+      <li> <%= rating.summary %> </li>
     <% end %>
   </ul>
+
 </div>
 
 <%= link_to("Create new rating", new_rating_path, class:'btn btn-primary') if current_user %>

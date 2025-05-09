@@ -10,6 +10,10 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    return unless turbo_frame_request?
+
+    @rating = @user.ratings.find(params[:rating_id])
+    render partial: 'rating', locals: { rating: @rating }
   end
 
   # GET /users/new
@@ -28,8 +32,17 @@ class UsersController < ApplicationController
     new_status = user.blocked? ? "closed" : "open"
     redirect_to user, notice: "User account status changed to #{new_status}"
   end
-  # POST /users or /users.json
 
+  def recommendation
+    # simulate a delay in calculating the recommendation
+    sleep(2)
+    ids = Beer.pluck(:id)
+    # our recommendation us just a randomly picked beer...
+    random_beer = Beer.find(ids.sample)
+    render partial: 'recommendation', locals: { beer: random_beer }
+  end
+
+  # POST /users or /users.json
   def create
     @user = User.new(user_params)
 
