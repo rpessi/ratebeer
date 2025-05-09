@@ -1,5 +1,5 @@
 class BreweriesController < ApplicationController
-  before_action :ensure_that_signed_in, except: [:index, :show, :list]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list, :active, :retired]
   before_action :set_brewery, only: %i[show edit update destroy]
   before_action :set_admin, only: %i[show destroy]
 
