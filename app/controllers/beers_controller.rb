@@ -14,14 +14,10 @@ class BeersController < ApplicationController
     offset = (@page - 1) * PAGE_SIZE
 
     @beers = case @order
-             when "name"    then Beer.order(:name)
-                                     .limit(PAGE_SIZE).offset(offset)
-             when "brewery" then Beer.joins(:brewery)
-                                     .order("breweries.name").limit(PAGE_SIZE).offset(offset)
-             when "style"   then Beer.joins(:style)
-                                     .order("styles.name").limit(PAGE_SIZE).offset(offset)
-             when "rating" then Beer.left_joins(:ratings)
-                                    .select("beers.*, avg(ratings.score)").group("beers.id")
+             when "name"    then Beer.order(:name).limit(PAGE_SIZE).offset(offset)
+             when "brewery" then Beer.joins(:brewery).order("breweries.name").limit(PAGE_SIZE).offset(offset)
+             when "style"   then Beer.joins(:style).order("styles.name").limit(PAGE_SIZE).offset(offset)
+             when "rating" then Beer.left_joins(:ratings).select("beers.*, avg(ratings.score)").group("beers.id")
                                     .order("avg(ratings.score) DESC").limit(PAGE_SIZE).offset(offset)
              end
 
