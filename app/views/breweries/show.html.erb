@@ -2,7 +2,5 @@
 
 <div>
   <%= edit_and_destroy_buttons_admin(@brewery)%>
-  <%= link_to "Change activity", toggle_activity_brewery_path(@brewery.id),
-    data: {turbo_method: "post"}, class: "btn btn-primary" if current_user %>
   <%= link_to "Back to breweries", breweries_path, class:"btn btn-primary" %>
 </div>

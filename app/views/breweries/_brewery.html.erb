@@ -15,8 +15,8 @@
   <%= brewery.beers.count %>
   </p>
 
-  <h3>Beers</h3>
-  <% cache @brewery do %>
+  <% unless @brewery.beers.count == 0%>
+    <h3>Beers</h3>
     <div>
       <table class="table table-hover">
         <thead>
@@ -36,14 +36,14 @@
           <% end %>
       </table>
     </div>
-
-    <p>
-      <% if brewery.ratings.empty? %>
-        Brewery has no ratings.
-      <% else %>
-        <%= brewery.rating_summary %>
-      <% end %>
-    </p>
   <% end %>
+
+  <p>
+    <% if brewery.ratings.empty? %>
+      Brewery has no ratings.
+    <% else %>
+      <%= brewery.rating_summary %>
+    <% end %>
+  </p>
 
 </div>

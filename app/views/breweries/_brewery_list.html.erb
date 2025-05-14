@@ -1,23 +1,25 @@
-<%= turbo_frame_tag tag_name do %>
+<%= turbo_frame_tag status do %>
   <div>
-    <table class="table table-hover">
+    <%= render "breweries/brewery_count", status: status %>
+    <table class="table table-striped table-hover">
 			<thead>
 			<tr>
-					<th scope="col">Name</th>
-					<th scope="col">Established</th>
-					<th scope="col">Beers</th>
-					<th scope="col">Rating</th>
+				<th scope="col">Name</th>
+				<th scope="col">Established</th>
+				<th scope="col">Beers</th>
+				<th scope="col">Rating</th>
+        <% if current_user %>
+          <th scope="col">Change activity</th>
+        <% end %>
+        <% if current_user&.admin? %>
+				  <th scope="col">Action</th>
+        <% end %>
 			</tr>
 			</thead>
-			<tbody>
-			<% breweries.each do |brewery| %>
-			<tr>
-					<th scope="row"><%= link_to brewery.name, brewery, data: { turbo_frame: "_top"} %></th>
-					<td><%= brewery.year %></td>
-					<td><%= brewery.beers.count %></td>
-					<td><%= round(brewery.average_rating) %></td>
-			</tr> 
-			<% end %>
+			<tbody id="<%= status %>_brewery_rows">
+				<% breweries.each do |brewery| %>
+					<%= render "breweries/brewery_row", brewery: brewery %>
+				<% end %>
 			</tbody>
     </table>
   </div>

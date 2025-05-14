@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "message_list" do %>
+  <div>
+  <% messages.each do |message| %>
+    <%= render "message_row", message: message %>
+  <% end %>
+  </div>
+<% end %>

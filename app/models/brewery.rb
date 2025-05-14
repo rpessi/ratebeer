@@ -13,6 +13,28 @@ class Brewery < ApplicationRecord
   scope :active, -> { where active: true }
   scope :retired, -> { where active: [nil, false] }
 
+  after_destroy_commit do
+    next if Rails.env.test?
+
+    broadcast_remove_to "breweries_index", target: self
+    status = active? ? "active" : "retired"
+    target_id = active? ? "active_brewery_count" : "retired_brewery_count"
+    broadcast_replace_to "breweries_index", partial: "breweries/brewery_count", target: target_id,
+                                            locals: { status: status }
+  end
+
+  after_create_commit do
+    next if Rails.env.test?
+
+    target_id1 = active? ? "active_brewery_rows" : "retired_brewery_rows"
+    broadcast_append_to "breweries_index", partial: "breweries/brewery_row", target: target_id1
+
+    status = active? ? "active" : "retired"
+    target_id2 = active? ? "active_brewery_count" : "retired_brewery_count"
+    broadcast_replace_to "breweries_index", partial: "breweries/brewery_count", target: target_id2,
+                                            locals: { status: status }
+  end
+
   def year_cannot_be_in_the_future_or_nil
     if year.nil?
       errors.add(:year, "can't be blank")

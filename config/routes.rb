@@ -20,6 +20,10 @@ Rails.application.routes.draw do
   resources :ratings do
     post 'toggle_arrow', on: :collection
   end
+  resources :messages, only: [:index, :new, :create, :destroy]
+  resources :messages do
+    get 'list', on: :collection
+  end
   resources :ratings, only: [:index, :new, :create, :destroy]
   resources :places, only: [:index]
   resource :session, only: [:new, :create, :destroy]

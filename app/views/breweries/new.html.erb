@@ -1,6 +1,8 @@
 <h1>New brewery</h1>
 
-<%= render "form", brewery: @brewery %>
+<%= turbo_frame_tag "new_brewery" do %>
+  <%= render "form", brewery: @brewery %>
+<% end %>
 
 <br>
 

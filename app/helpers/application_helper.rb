@@ -17,6 +17,15 @@ module ApplicationHelper
     raw("#{edit} #{del}")
   end
 
+  def destroy_button_admin(item)
+    puts "destroy_button_admin, #{current_user.username}"
+    conf_msg = "Are you sure you want to remove #{item.name} and all beers associated with it?"
+    del = link_to('Delete', item, class: "btn btn-sm btn-danger",
+                                  data: { 'turbo-method': :delete,
+                                          turbo_confirm: conf_msg })
+    raw(del.to_s)
+  end
+
   # rounding is alredy included in rating_average-method, this code is for week 6 exercise 9
   def round(number)
     number.round(1)

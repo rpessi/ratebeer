@@ -1,0 +1,3 @@
+<p id="<%= status %>_brewery_count">
+  <%= "Number of #{status} breweries: #{Brewery.send(status).count}" %>
+</p>

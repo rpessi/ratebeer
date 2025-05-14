@@ -27,15 +27,6 @@ class RatingsController < ApplicationController
     redirect_to ratings_path(page: @page, order: @order)
   end
 
-  # CODE FROM routes.rb
-  #   resources :ratings do
-  #     post 'toggle_arrow', on: :collection
-  #   end
-  #   resources :ratings, only: [:index, :new, :create, :destroy]
-  # CODE FROM index.html.erb
-  # <%= link_to "&uarr", toggle_arrow_ratings_path(page: @page, order: @order) unless @order == "up" %>
-  # <%= link_to "&darr", toggle_arrow_ratings_path(page: @page, order: @order) unless @order == "down" %>
-
   def new
     @rating = Rating.new
     @beers = Beer.all

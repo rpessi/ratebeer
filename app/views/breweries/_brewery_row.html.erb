@@ -1,0 +1,10 @@
+<tr id="<%= dom_id(brewery) %>">
+  <th scope="row"><%= link_to brewery.name, brewery, data: { turbo_frame: "_top"} %></th>
+  <td><%= brewery.year %></td>
+  <td><%= brewery.beers.count %></td>
+  <td><%= round(brewery.average_rating) %></td>
+  <% label = brewery.active? ? "Retire" : "Activate" %>
+  <td><%= link_to label, toggle_activity_brewery_path(brewery.id),
+    data: {turbo_method: "post"}, class: "btn btn-primary" if current_user %></td>
+  <td><%= destroy_button_admin(brewery) if current_user&.admin? %></td>
+</tr>

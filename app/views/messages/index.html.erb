@@ -1,0 +1,11 @@
+<%= turbo_stream_from "messages_index" %>
+
+<h1>Beerchat</h1>
+
+<%= turbo_frame_tag "new_message", src: new_message_path if current_user %>
+<br>
+<%= turbo_frame_tag "message_list", src: list_messages_path do %>
+  Fetching messages...
+<% end %>
+
+

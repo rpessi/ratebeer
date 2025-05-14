@@ -10,6 +10,7 @@ class User < ApplicationRecord
                                  message: "Password must have at least one capital letter and one number." }
 
   has_many :ratings, dependent: :destroy
+  has_many :messages, dependent: :destroy
   has_many :beers, through: :ratings
   has_many :memberships, dependent: :destroy
   has_many :beer_clubs, through: :memberships

@@ -29,8 +29,8 @@ RSpec.describe Brewery, type: :model do
 
   describe "with an existing brewery" do
     let!(:brewery) { FactoryBot.create :brewery }
-    let!(:beer1) { FactoryBot.create :beer, name: "Iso 3", brewery:brewery }
-    let!(:beer2) { FactoryBot.create :beer, name: "Karhu", brewery:brewery }
+    let!(:beer1) { FactoryBot.create :beer, name: "Iso 3", brewery: brewery }
+    let!(:beer2) { FactoryBot.create :beer, name: "Karhu", brewery: brewery }
     let!(:user) { FactoryBot.create :user }
     let!(:rating1) { FactoryBot.create :rating, beer: beer1, score: 15, user: user }
     let!(:rating2) { FactoryBot.create :rating, beer: beer2, score: 20, user: user }
