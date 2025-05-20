@@ -24,7 +24,8 @@ Rails.application.routes.draw do
   resources :messages do
     get 'list', on: :collection
   end
-  resources :ratings, only: [:index, :new, :create, :destroy]
+  resources :ratings, only: [:index, :new, :create, :show]
+  delete 'ratings', to: 'ratings#destroy'
   resources :places, only: [:index]
   resource :session, only: [:new, :create, :destroy]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -39,4 +40,5 @@ Rails.application.routes.draw do
   post 'places', to: 'places#search'
   get 'beerlist', to: 'beers#list'
   get 'brewerylist', to: 'breweries#list'
+  get 'calculator', to: 'misc#calculator'
 end

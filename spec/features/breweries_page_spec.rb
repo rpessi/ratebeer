@@ -53,8 +53,7 @@ describe "Breweries page" do
 
       it "to change activity of a brewery", :skip_in_ci do
         sign_in(username: "Pekka", password: "Foobar1")
-        visit breweries_path
-        binding.pry
+        visit brewery_path(@brewery)
         expect(page).to have_link "Retire"
         click_link('Retire')
         @brewery.reload

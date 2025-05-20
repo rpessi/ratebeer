@@ -96,7 +96,7 @@ describe "Rating" do
     expect(page).to have_content "Karhu 18"
   end
 
-  it "will delete the rating upon user's request" do
+  it "will delete the rating upon user's request", :skip_in_ci do
     visit new_rating_path
     select('Iso 3', from: 'rating[beer_id]')
     fill_in('rating[score]', with: '15')

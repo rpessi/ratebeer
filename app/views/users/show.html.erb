@@ -19,18 +19,7 @@
 
   <% unless @user.ratings.empty? %>
     <h3>Ratings</h3>
-    <ul>
-        <% @user.ratings.each do |rating| %>
-          <li> <%= link_to rating.to_s, user_path(@user, rating_id: rating.id, turbo_frame: "rating"), data: { turbo_frame: "rating" } %> 
-            <% if @user == current_user %>
-              <%= link_to 'Delete', rating, class:'btn btn-outline-danger btn-sm', data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
-            <% end %> 
-          </li>
-        <% end %>
-      <br>
-      <%= turbo_frame_tag "rating" do %>
-      <% end %>
-    </ul>
+    <%= render partial: 'ratings' %>
   <% end %>
 
   <%= turbo_frame_tag "beer_recommendation_tag", src: recommendation_user_path do %>
