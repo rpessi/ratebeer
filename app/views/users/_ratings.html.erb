@@ -5,11 +5,14 @@
         <input type="checkbox" name="ratings[]" value="<%= rating.id %>"/>
       <% end %>
       <span>
-        <%= link_to rating.to_s, rating, data: { turbo_frame: "rating_details" }  %> 
+        <%= link_to rating.to_s, user_path(@user, rating_id: rating.id, turbo_frame: "rating"), data: { turbo_frame: "rating" } %>
       </span>
     </div>
   <% end %>
   <% if @user == current_user %>
+    <span> Select all / deselect all
+    <input type="checkbox" data-action="change->ratings#toggleSelection"/></span>
+    <br>
     <button data-action="click->ratings#destroy">Delete selected</button>
   <% end %>
 </div>

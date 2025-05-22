@@ -22,6 +22,9 @@
     <%= render partial: 'ratings' %>
   <% end %>
 
+  <%= turbo_frame_tag "rating" do %>
+  <% end %>
+
   <%= turbo_frame_tag "beer_recommendation_tag", src: recommendation_user_path do %>
     Calculating the recommendation...
   <% end %>

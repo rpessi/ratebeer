@@ -49,8 +49,6 @@ class BreweriesController < ApplicationController
                           turbo_stream.replace("#{old_status}_brewery_count", partial: "brewery_count", locals: { status: old_status }),
                           turbo_stream.remove(brewery),
                           turbo_stream.append("#{new_status}_brewery_rows", partial: "brewery_row", locals: { brewery: brewery })]
-
-    # redirect_to brewery, notice: "Brewery activity status changed to #{new_status}"; nil
   end
 
   # POST /breweries or /breweries.json
@@ -62,7 +60,6 @@ class BreweriesController < ApplicationController
         format.turbo_stream {
           status = @brewery.active? ? "active" : "retired"
           render turbo_stream: [turbo_stream.append("#{status}_brewery_rows", partial: "brewery_row", locals: { brewery: @brewery }),
-                                turbo_stream.replace("new_brewery", partial: "form", locals: { brewery: Brewery.new }),
                                 turbo_stream.replace("#{status}_brewery_count", partial: "brewery_count", locals: { status: status })]
         }
         format.html { redirect_to @brewery, notice: "Brewery was successfully created." }

@@ -1,4 +1,4 @@
-<%= form_with(model: brewery) do |form| %>
+<%= form_with(model: brewery, data: {controller: "form", action: "turbo:submit-end->form#clear"}) do |form| %>
   <% if brewery.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(brewery.errors.count, "error") %> prohibited this brewery from being saved:</h2>
@@ -13,20 +13,24 @@
 
   <div class="mb-2">
     <%= form.label :name, class: "form-label" %>
-    <%= form.text_field :name, class: "form-control", placeholder: "Imatran Kuohu" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Imatran Kuohu", data: { form_target: "name" } %>
   </div>
 
   <div class="mb-2">
     <%= form.label :year, class: "form-label" %>
-    <%= form.number_field :year, class: "form-control", placeholder: 1920 %>
+    <%= form.number_field :year, class: "form-control", placeholder: 1920, data: { form_target: "year" } %>
   </div>
 
   <div class="form-check">
   <%= form.label :active, class: "form-check-label" %> 
-  <%= form.check_box :active, class: "form-check-input", type: "checkbox" %>
+  <%= form.check_box :active, class: "form-check-input", type: "checkbox", data: { form_target: "active", checkbox_target: "input"} %>
   </div>
   <br>
   <div>
     <%= form.submit class:'btn btn-primary btn-sm' %>
   </div>
+  <br>
+  <button type="button" class="btn btn-primary btn-sm" data-action="form#clear">Clear form</button>
+  </div>
+  <br>
 <% end %>
