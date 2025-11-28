@@ -3,10 +3,11 @@ if Rails.env.production?
   Sentry.init do |config|
     config.dsn = ENV['SENTRY_DSN']
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
-    config.traces_sample_rate = 1.0
+    config.traces_sample_rate = 0
+    config.sample_rate = 0.1
     # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
-    config.send_default_pii = true
+    config.send_default_pii = false
   end
 else
   # Define a mock Sentry module for non-production environments to avoid errors
